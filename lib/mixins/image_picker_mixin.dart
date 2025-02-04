@@ -8,6 +8,7 @@ import 'package:wechat_camera_picker/wechat_camera_picker.dart';
 
 
 mixin ImagePickerMixin<T extends StatefulWidget> {
+
   final log = Logger(printer: PrettyPrinter());
   final List<AssetEntity> assets = List.of({});
   final AssetPickerTextDelegate textDelegate = const AssetPickerTextDelegate();
@@ -72,7 +73,8 @@ mixin ImagePickerMixin<T extends StatefulWidget> {
     return "video/$ext";
   }
 
-  Future<List<AssetEntity>?> openPicker(BuildContext context, int maxAssetsCount) async {
+  Future<List<AssetEntity>?> openPicker(BuildContext context, int maxAssetsCount,
+      Function(BuildContext, AssetEntity) handleResult, ) async {
     return AssetPicker.pickAssets(
       context,
       pickerConfig: AssetPickerConfig(
@@ -94,22 +96,19 @@ mixin ImagePickerMixin<T extends StatefulWidget> {
             child: GestureDetector(
               behavior: HitTestBehavior.opaque,
               onTap: () async {
+                Feedback.forTap(context);
                 final AssetEntity? result = await _pickFromCamera(context);
-                if (result == null) {
-                  return;
+                if (result != null) {
+                  handleResult(context, result);
                 }
-                final AssetPicker<AssetEntity, AssetPathEntity> picker = context.findAncestorWidgetOfExactType()!;
-                final DefaultAssetPickerBuilderDelegate builder = picker.builder as DefaultAssetPickerBuilderDelegate;
-                final DefaultAssetPickerProvider p = builder.provider;
-                await p.switchPath(
-                  PathWrapper<AssetPathEntity>(
-                    path: await p.currentPath!.path.obtainForNewProperties(),
-                  ),
-                );
-                p.selectAsset(result);
               },
-              child: const Center(
-                child: Icon(Icons.camera_enhance, size: 42.0),
+              child: Container(
+                padding: const EdgeInsets.all(28.0),
+                color: Theme.of(context).dividerColor,
+                child: const FittedBox(
+                  fit: BoxFit.fill,
+                  child: Icon(Icons.camera_enhance),
+                ),
               ),
             ),
           );
