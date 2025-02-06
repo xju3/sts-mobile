@@ -1,19 +1,19 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
 import 'package:uuid/uuid.dart';
+import 'package:jiwa/server/api/minio_api.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:wechat_assets_picker/wechat_assets_picker.dart';
 import 'package:wechat_camera_picker/wechat_camera_picker.dart';
 
-
 mixin ImagePickerMixin<T extends StatefulWidget> {
-
   final log = Logger(printer: PrettyPrinter());
   final List<AssetEntity> assets = List.of({});
   final AssetPickerTextDelegate textDelegate = const AssetPickerTextDelegate();
   final uuid = const Uuid();
   final dio = Dio();
+  final minioApi = MinioApi();
   final String assetsLoading = 'assets/images/spin-1s-200px.gif';
 
   Future<AssetEntity?> _pickFromCamera(BuildContext ctx) {
@@ -25,7 +25,8 @@ mixin ImagePickerMixin<T extends StatefulWidget> {
 
   bool isImage(String url) {
     var ext = url.split('.').last;
-    if (['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp'].contains(ext.toLowerCase())) return true;
+    if (['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp']
+        .contains(ext.toLowerCase())) return true;
     return false;
   }
 
@@ -36,45 +37,49 @@ mixin ImagePickerMixin<T extends StatefulWidget> {
     return url;
   }
 
-  void initFadeInImages( List<String> resources, List<Widget> images, String bucket, String id, List<ImageProvider> imageProviders) {
-    imageProviders.clear();
-    for (var resource in resources) {
-      var url = "";
-      imageProviders.add(CachedNetworkImageProvider(url));
-      url = getImageUrl(url);
-      images.add(Container(
-        width: 130,
-        height: 130,
-        clipBehavior: Clip.antiAlias,
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(15) // Adjust the radius as needed
-        ),
-        child: CachedNetworkImage(
-          imageUrl: url,
-          fit: BoxFit.fill,
-          height: 25.0,
-          // placeholder: (context, url) => const CircularProgressIndicator(
-          //   strokeWidth: 1,
-          //   strokeCap: StrokeCap.round,
-          // ),
-          progressIndicatorBuilder: (context, url, downloadProgress) =>
-              LinearProgressIndicator(
-                value: downloadProgress.progress,
-                color: Colors.blue,
-              ),
-          errorWidget: (context, url, error) => const Icon(Icons.error),
-        ),
-      ));
-    }
-  }
-
   String getContextType(String ext) {
-    if (['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp'].contains(ext.toLowerCase())) return "image/$ext";
+    if (['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp']
+        .contains(ext.toLowerCase())) return "image/$ext";
     return "video/$ext";
   }
 
-  Future<List<AssetEntity>?> openPicker(BuildContext context, int maxAssetsCount,
-      Function(BuildContext, AssetEntity) handleResult, ) async {
+  Future<void> minioUpload(List<AssetEntity> elements, String resourceId,
+      Function(int) onSuccess) async {
+    // var total = elements.length;
+
+    var index = 0;
+    for (var element in elements) {
+      index++;
+      var file = await element.file;
+      if (null == file) return;
+      var ext = file.path.split(".").last;
+      var fileName = '$index.$ext';
+      if (!isImage(fileName)) {
+        continue;
+      }
+      var url = await minioApi.getPreassignedPutKey('$resourceId/$fileName');
+      var bytes = file.openRead();
+      var length = await file.length();
+      await dio.put(url,
+          data: bytes,
+          options: Options(
+            headers: {
+              'Content-Type': getContextType(ext),
+              'Accept': "*/*",
+              'Content-Length': length.toString(),
+              'Connection': 'keep-alive',
+            },
+          ));
+      onSuccess(index);
+    }
+
+  }
+
+  Future<List<AssetEntity>?> openPicker(
+    BuildContext context,
+    int maxAssetsCount,
+    Function(BuildContext, AssetEntity) handleResult,
+  ) async {
     return AssetPicker.pickAssets(
       context,
       pickerConfig: AssetPickerConfig(
@@ -82,10 +87,10 @@ mixin ImagePickerMixin<T extends StatefulWidget> {
         selectedAssets: assets,
         specialItemPosition: SpecialItemPosition.prepend,
         specialItemBuilder: (
-            BuildContext context,
-            AssetPathEntity? path,
-            int length,
-            ) {
+          BuildContext context,
+          AssetPathEntity? path,
+          int length,
+        ) {
           if (path?.isAll != true) {
             return null;
           }

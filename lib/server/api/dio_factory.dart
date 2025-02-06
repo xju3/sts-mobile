@@ -1,5 +1,5 @@
 import 'package:dio/dio.dart';
-import 'package:jiwa/api/constants.dart';
+import 'package:jiwa/server/api/constants.dart';
 import 'package:logger/logger.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 

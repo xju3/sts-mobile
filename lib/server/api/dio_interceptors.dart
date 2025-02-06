@@ -1,9 +1,6 @@
-import 'dart:convert';
-
 import 'package:dio/dio.dart';
-import 'package:jiwa/api/model/http_response.dart';
 import 'package:jiwa/mixins/common_mixin.dart';
-import 'package:jiwa/api/constants.dart';
+import 'package:jiwa/server/api/constants.dart';
 import 'package:fbroadcast/fbroadcast.dart';
 import 'package:logger/logger.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -57,19 +54,6 @@ class AppInterceptors extends Interceptor with MessageMixin {
     if (response.data is List) {
       handler.next(response);
       return;
-    }
-
-    if (response.data is String) {
-      var result = json.decode(response.data);
-      if (null == result) return;
-      var err = HttpResponse.fromJson(result['err']);
-      if (err.code != '0') {
-        logger.e(err.message);
-        FBroadcast.instance().broadcast(MessageMixin.errMessage, value: err.message);
-        return;
-      }
-      response.data = result['data'];
-      handler.next(response);
     }
   }
 }

@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'student_api.dart';
+part of 'minio_api.dart';
 
 // **************************************************************************
 // RetrofitGenerator
@@ -8,8 +8,8 @@ part of 'student_api.dart';
 
 // ignore_for_file: unnecessary_brace_in_string_interps,no_leading_underscores_for_local_identifiers,unused_element,unnecessary_string_interpolations
 
-class _StudentApi implements StudentApi {
-  _StudentApi(
+class _MinioApi implements MinioApi {
+  _MinioApi(
     this._dio, {
     this.baseUrl,
     this.errorLogger,
@@ -24,31 +24,19 @@ class _StudentApi implements StudentApi {
   final ParseErrorLogger? errorLogger;
 
   @override
-  Future<Ticket> uploadImages(
-    String studentId,
-    List<MultipartFile>? files,
-  ) async {
+  Future<String> getPreassignedPutKey(String objectName) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
-    queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};
-    final _data = FormData();
-    _data.fields.add(MapEntry(
-      'studentId',
-      studentId,
-    ));
-    if (files != null) {
-      _data.files.addAll(files.map((i) => MapEntry('files', i)));
-    }
-    final _options = _setStreamType<Ticket>(Options(
-      method: 'POST',
+    const Map<String, dynamic>? _data = null;
+    final _options = _setStreamType<String>(Options(
+      method: 'GET',
       headers: _headers,
       extra: _extra,
-      contentType: 'multipart/form-data',
     )
         .compose(
           _dio.options,
-          '/images/upload',
+          '/minio/get_access_key',
           queryParameters: queryParameters,
           data: _data,
         )
@@ -57,15 +45,53 @@ class _StudentApi implements StudentApi {
           _dio.options.baseUrl,
           baseUrl,
         )));
-    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
-    late Ticket _value;
+    final _result = await _dio.fetch<String>(_options);
+    late String _value;
     try {
-      _value = Ticket.fromJson(_result.data!);
+      _value = _result.data!;
     } on Object catch (e, s) {
       errorLogger?.logError(e, s, _options);
       rethrow;
     }
     return _value;
+  }
+
+  @override
+  Future<void> Upload(
+    String url,
+    dynamic header,
+    File file,
+  ) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{r'Content-Type': header};
+    _headers.removeWhere((k, v) => v == null);
+    final _data = FormData();
+    _data.files.add(MapEntry(
+      'file',
+      MultipartFile.fromFileSync(
+        file.path,
+        filename: file.path.split(Platform.pathSeparator).last,
+      ),
+    ));
+    final _options = _setStreamType<void>(Options(
+      method: 'PUT',
+      headers: _headers,
+      extra: _extra,
+      contentType: 'multipart/form-data',
+    )
+        .compose(
+          _dio.options,
+          '${url}',
+          queryParameters: queryParameters,
+          data: _data,
+        )
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        )));
+    await _dio.fetch<void>(_options);
   }
 
   RequestOptions _setStreamType<T>(RequestOptions requestOptions) {
