@@ -28,7 +28,7 @@ class _AccountApi implements AccountApi {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
-    final _data = mobile;
+    final _data = {'mobile': mobile};
     final _options = _setStreamType<AccountInfo>(Options(
       method: 'POST',
       headers: _headers,

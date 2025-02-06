@@ -1,19 +1,26 @@
 import 'package:dio/dio.dart';
-import 'package:jiwa/mixins/common_mixin.dart';
+import 'package:jiwa/server/model/result.dart';
+import 'package:jiwa/views/mixins/common_mixin.dart';
 import 'package:jiwa/server/api/constants.dart';
+import 'package:jiwa/server/model/err_msg.dart';
 import 'package:fbroadcast/fbroadcast.dart';
 import 'package:logger/logger.dart';
+import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AppInterceptors extends Interceptor with MessageMixin {
   final Logger logger = Logger(printer: PrettyPrinter());
 
   @override
-  void onRequest(RequestOptions options, RequestInterceptorHandler handler) async {
+  void onRequest(
+      RequestOptions options, RequestInterceptorHandler handler) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var token = prefs.getString(AppConstants.kToken);
     if (null != token) {
-      options.headers.addAll({"Authorization": 'Bearer $token', 'ngrok-skip-browser-warning':'hello'});
+      options.headers.addAll({
+        "Authorization": 'Bearer $token',
+        'ngrok-skip-browser-warning': 'hello'
+      });
     }
     handler.next(options);
   }
@@ -40,20 +47,14 @@ class AppInterceptors extends Interceptor with MessageMixin {
     ResponseInterceptorHandler handler,
   ) async {
     logger.d(response);
-    if (response.statusCode != 200) {
-      logger.e("response status: ${response.statusCode}");
+    var map = jsonDecode(response.data);
+    var result = Result.fromJson(map);
+    var err = result.err;
+    if (err == null || err.code == null || err.code != '0') {
+      FBroadcast.instance().broadcast(MessageMixin.errMessage, value: "");
       return;
     }
-
-    if (response.data.length == 0) {
-      logger.i("empty value.");
-      return;
-    }
-
-    // 修改过返回值的内容，若是list直接返回
-    if (response.data is List) {
-      handler.next(response);
-      return;
-    }
+    response.data = result.data;
+    handler.next(response);
   }
 }

@@ -11,6 +11,9 @@ class ReviewAi {
   DateTime? startTime;
   @JsonKey(name: 'endTime')
   DateTime? endTime;
+  @JsonKey(name: 'transTime')
+  DateTime? transTime;
+
   String? subject;
   int? total;
   int? correct;
@@ -24,6 +27,7 @@ class ReviewAi {
       this.requestId,
       this.startTime,
       this.endTime,
+        this.transTime,
       this.subject,
       this.total,
       this.correct,

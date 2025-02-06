@@ -24,13 +24,13 @@ class _MinioApi implements MinioApi {
   final ParseErrorLogger? errorLogger;
 
   @override
-  Future<String> getPreassignedPutKey(String objectName) async {
+  Future<SingleValue> getPreassignedPutKey(String objectName) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
-    const Map<String, dynamic>? _data = null;
-    final _options = _setStreamType<String>(Options(
-      method: 'GET',
+    final _data = {'objectName': objectName};
+    final _options = _setStreamType<SingleValue>(Options(
+      method: 'POST',
       headers: _headers,
       extra: _extra,
     )
@@ -45,53 +45,15 @@ class _MinioApi implements MinioApi {
           _dio.options.baseUrl,
           baseUrl,
         )));
-    final _result = await _dio.fetch<String>(_options);
-    late String _value;
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late SingleValue _value;
     try {
-      _value = _result.data!;
+      _value = SingleValue.fromJson(_result.data!);
     } on Object catch (e, s) {
       errorLogger?.logError(e, s, _options);
       rethrow;
     }
     return _value;
-  }
-
-  @override
-  Future<void> Upload(
-    String url,
-    dynamic header,
-    File file,
-  ) async {
-    final _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{};
-    final _headers = <String, dynamic>{r'Content-Type': header};
-    _headers.removeWhere((k, v) => v == null);
-    final _data = FormData();
-    _data.files.add(MapEntry(
-      'file',
-      MultipartFile.fromFileSync(
-        file.path,
-        filename: file.path.split(Platform.pathSeparator).last,
-      ),
-    ));
-    final _options = _setStreamType<void>(Options(
-      method: 'PUT',
-      headers: _headers,
-      extra: _extra,
-      contentType: 'multipart/form-data',
-    )
-        .compose(
-          _dio.options,
-          '${url}',
-          queryParameters: queryParameters,
-          data: _data,
-        )
-        .copyWith(
-            baseUrl: _combineBaseUrls(
-          _dio.options.baseUrl,
-          baseUrl,
-        )));
-    await _dio.fetch<void>(_options);
   }
 
   RequestOptions _setStreamType<T>(RequestOptions requestOptions) {

@@ -1,25 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:jiwa/server/model/review_ai.dart';
+import 'package:jiwa/server/model/review_detail.dart';
 
 class AIReviewCard extends StatelessWidget {
-  final DateTime submissionTime;
-  final DateTime aiReviewStartTime;
-  final DateTime aiReviewEndTime;
-  final int totalQuestions;
-  final int wrongAnswers;
-  final int correctAnswers;
-  final String summary;
-
-  const AIReviewCard({
-    Key? key,
-    required this.submissionTime,
-    required this.aiReviewStartTime,
-    required this.aiReviewEndTime,
-    required this.totalQuestions,
-    required this.wrongAnswers,
-    required this.correctAnswers,
-    required this.summary,
-  }) : super(key: key);
+  final ReviewAi review;
+  final Function(List<ReviewDetail>) showReviewDetails;
+  const AIReviewCard(this.review, this.showReviewDetails, {super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -41,36 +28,39 @@ class AIReviewCard extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text('Submission Time: ${formatter.format(submissionTime)}'),
-                Text('Review Duration: ${_calculateDuration(aiReviewStartTime, aiReviewEndTime)}'),
+                Text('Submission Time: ${formatter.format(review.transTime!)}'),
+                Text(
+                    'Review Duration: ${_calculateDuration(review.startTime!, review.endTime!)}'),
               ],
             ),
             const SizedBox(height: 8),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text('Review Start Time: ${formatter.format(aiReviewStartTime)}'),
-                Text('Review End Time: ${formatter.format(aiReviewEndTime)}'),
+                Text(
+                    'Review Start Time: ${formatter.format(review.startTime!)}'),
+                Text('Review End Time: ${formatter.format(review.endTime!)}'),
               ],
             ),
             const SizedBox(height: 16),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text('Total Questions: $totalQuestions'),
+                Text('Total Questions: $review.total'),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
-                    Text('Correct: $correctAnswers'),
-                    Text('Wrong: $wrongAnswers'),
+                    Text('Correct: $review.correct'),
+                    Text('Wrong: $review.incorrect', ),
                   ],
                 ),
               ],
             ),
             const SizedBox(height: 16),
-            const Text('Summary:', style: TextStyle(fontWeight: FontWeight.bold)),
+            const Text('Summary:',
+                style: TextStyle(fontWeight: FontWeight.bold)),
             const SizedBox(height: 8),
-            Text(summary),
+            Text(review.summary!),
           ],
         ),
       ),

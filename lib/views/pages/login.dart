@@ -1,6 +1,7 @@
-import 'package:jiwa/mixins/login_minxin.dart';
+import 'package:jiwa/views/mixins/login_minxin.dart';
 import 'package:jiwa/server/api/account_api.dart';
 import 'package:flutter/material.dart';
+import 'package:jiwa/views/pages/register.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -12,9 +13,16 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> with LoginMixin {
   final _formKey = GlobalKey<FormState>();
   final _accountApi = AccountApi();
-  String? _mobile;
+  String? _mobile = '18301880898';
 
   void _register() {
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => const RegisterPage()),
+    );
+  }
+
+  void _login() {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
       _accountApi.login(_mobile).then((accountInfo) async {
@@ -49,6 +57,10 @@ class _LoginPageState extends State<LoginPage> with LoginMixin {
               const SizedBox(height: 20),
               ElevatedButton(
                 onPressed: _register,
+                child: const Text('注册'),
+              ),
+              ElevatedButton(
+                onPressed: _login,
                 child: const Text('Login'),
               ),
             ],

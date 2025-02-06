@@ -3,7 +3,6 @@ import 'package:jiwa/server/model/review_ai.dart';
 import 'package:wechat_camera_picker/wechat_camera_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uuid/uuid.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:fbroadcast/fbroadcast.dart';
 import 'package:jiwa/server/api/review_api.dart';
 
@@ -24,7 +23,7 @@ mixin HomeMixin<T extends StatefulWidget> {
     int count = assets.length;
 
     Future<void> onSuccess(index) async {
-      EasyLoading.show(status: "正在上传文件($index/$count)");
+      // EasyLoading.show(status: "正在上传文件($index/$count)");
       if (index == count) {
         await reviewApi.createReview(studentId, requestId);
         FBroadcast.instance().broadcast("review_submit",
@@ -32,9 +31,9 @@ mixin HomeMixin<T extends StatefulWidget> {
       }
     }
 
-    EasyLoading.show(status: "正在上传文件...");
+    // EasyLoading.show(status: "正在上传文件...");
     uploader(assets, resourceId, onSuccess);
-    EasyLoading.dismiss();
+    // EasyLoading.dismiss();
   }
 
   Future<List<ReviewAi>> getReviewList() async {

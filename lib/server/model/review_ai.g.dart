@@ -15,6 +15,9 @@ ReviewAi _$ReviewAiFromJson(Map<String, dynamic> json) => ReviewAi(
       endTime: json['endTime'] == null
           ? null
           : DateTime.parse(json['endTime'] as String),
+      transTime: json['transTime'] == null
+          ? null
+          : DateTime.parse(json['transTime'] as String),
       subject: json['subject'] as String?,
       total: (json['total'] as num?)?.toInt(),
       correct: (json['correct'] as num?)?.toInt(),
@@ -31,6 +34,7 @@ Map<String, dynamic> _$ReviewAiToJson(ReviewAi instance) => <String, dynamic>{
       'requestId': instance.requestId,
       'startTime': instance.startTime?.toIso8601String(),
       'endTime': instance.endTime?.toIso8601String(),
+      'transTime': instance.transTime?.toIso8601String(),
       'subject': instance.subject,
       'total': instance.total,
       'correct': instance.correct,

@@ -16,7 +16,7 @@ abstract class ReviewApi extends BaseApi {
   @POST("/review/ai/list/{studentId}")
   Future<List<ReviewAi>> getReviewList(@Path() String studentId);
 
-  @POST("/review/request/create/{studentId}/{requestId}")
+  @PUT("/review/request/create/{studentId}/{requestId}")
   Future<List<ReviewAi>> createReview(
       @Path() String studentId, @Path() String requestId);
 }

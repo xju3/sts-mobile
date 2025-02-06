@@ -1,8 +1,8 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:jiwa/pages/login.dart';
-import 'package:jiwa/pages/home.dart';
+import 'package:jiwa/views/pages/login.dart';
+import 'package:jiwa/views/pages/home.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SplashPage extends StatefulWidget {
@@ -29,7 +29,7 @@ class _SplashPageState extends State<SplashPage> {
     });
   }
 
-  int _counter = 5;
+  int _counter = 3;
   Timer? _timer;
 
   @override
@@ -74,11 +74,7 @@ class _SplashPageState extends State<SplashPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Image.asset(
-              'assets/images/logo.png', // Replace with your logo asset path
-              height: 100,
-              width: 100,
-            ),
+            Text("启动页，会放一些操作指导，或宣传信息"),
             const SizedBox(height: 20),
             const CircularProgressIndicator(), // Or a simple text like "Loading..."
           ],

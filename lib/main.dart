@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:jiwa/pages/splash.dart';
+import 'package:jiwa/views/pages/splash.dart';
 
 class MyApp extends StatefulWidget {
   const MyApp({super.key});

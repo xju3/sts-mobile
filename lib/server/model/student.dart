@@ -8,7 +8,7 @@ class Student {
   final String? id;
   final String? name;
   final String? school;
-  final String? grade;
+  final int? grade;
 
   Student({this.id, this.name, this.school, this.grade});
 

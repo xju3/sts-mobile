@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:jiwa/mixins/login_minxin.dart';
+import 'package:jiwa/views/mixins/login_minxin.dart';
 import 'package:jiwa/server/api/account_api.dart';
 import 'package:jiwa/server/model/registration.dart';
 

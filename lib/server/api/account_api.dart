@@ -15,7 +15,7 @@ abstract class AccountApi extends BaseApi {
   }
 
   @POST("/account/login")
-  Future<AccountInfo> login(@Body() mobile);
+  Future<AccountInfo> login(@Field("mobile") mobile);
 
   @POST("/account/create")
   Future<AccountInfo> create(@Body() Registration registration);
