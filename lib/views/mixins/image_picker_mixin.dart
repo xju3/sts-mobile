@@ -18,7 +18,9 @@ mixin ImagePickerMixin<T extends StatefulWidget> {
   Future<AssetEntity?> _pickFromCamera(BuildContext ctx) {
     return CameraPicker.pickFromCamera(
       ctx,
-      pickerConfig: const CameraPickerConfig(enableRecording: false),
+      pickerConfig: const CameraPickerConfig(enableRecording: false,
+          imageFormatGroup: ImageFormatGroup.jpeg,
+          resolutionPreset: ResolutionPreset.medium),
     );
   }
 
