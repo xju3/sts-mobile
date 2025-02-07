@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:jiwa/server/model/review_detail.dart';
+import 'package:duowa/server/model/review_detail.dart';
 import 'package:logger/logger.dart';
 import 'package:wechat_camera_picker/wechat_camera_picker.dart';
 import 'package:wechat_assets_picker/wechat_assets_picker.dart';
-import 'package:jiwa/views/mixins/image_picker_mixin.dart';
-import 'package:jiwa/views/mixins/home_mixin.dart';
-import 'package:jiwa/server/api/review_api.dart';
-import 'package:jiwa/views/cards/review_card.dart';
+import 'package:duowa/views/mixins/image_picker_mixin.dart';
+import 'package:duowa/views/mixins/home_mixin.dart';
+import 'package:duowa/server/api/review_api.dart';
+import 'package:duowa/views/cards/review_card.dart';
 
 import '../../server/model/review_ai.dart';
 
@@ -52,12 +52,12 @@ class _HomePageState extends State<HomePage> with ImagePickerMixin, HomeMixin {
         ),
         body: GridView(
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            childAspectRatio: 1.0,
+            childAspectRatio: 1.5,
             crossAxisSpacing: 1.0,
             mainAxisSpacing: 1.0,
-            crossAxisCount: 2,
+            crossAxisCount: 1,
           ),
-          children: reviews.map((e) => AIReviewCard(e, showReviewDetail)).toList(),
+          children: reviews.map((e) => ReviewCard(e, showReviewDetail)).toList(),
         ),
         floatingActionButton: FloatingActionButton(onPressed: selectImages));
   }

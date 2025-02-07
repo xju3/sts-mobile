@@ -2,7 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
 import 'package:uuid/uuid.dart';
-import 'package:jiwa/server/api/minio_api.dart';
+import 'package:duowa/server/api/minio_api.dart';
 import 'package:wechat_assets_picker/wechat_assets_picker.dart';
 import 'package:wechat_camera_picker/wechat_camera_picker.dart';
 
@@ -18,16 +18,15 @@ mixin ImagePickerMixin<T extends StatefulWidget> {
   Future<AssetEntity?> _pickFromCamera(BuildContext ctx) {
     return CameraPicker.pickFromCamera(
       ctx,
-      pickerConfig: const CameraPickerConfig(enableRecording: false,
+      pickerConfig: const CameraPickerConfig(
+          enableRecording: false,
           imageFormatGroup: ImageFormatGroup.jpeg,
           resolutionPreset: ResolutionPreset.medium),
     );
   }
 
   bool isImage(String url) {
-    var ext = url
-        .split('.')
-        .last;
+    var ext = url.split('.').last;
     if (['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp']
         .contains(ext.toLowerCase())) return true;
     return false;
@@ -46,18 +45,22 @@ mixin ImagePickerMixin<T extends StatefulWidget> {
     return "video/$ext";
   }
 
-  Future<List<AssetEntity>?> openPicker(BuildContext context,
-      int maxAssetsCount,
-      Function(BuildContext, AssetEntity) handleResult,) async {
+  Future<List<AssetEntity>?> openPicker(
+    BuildContext context,
+    int maxAssetsCount,
+    Function(BuildContext, AssetEntity) handleResult,
+  ) async {
     return AssetPicker.pickAssets(
       context,
       pickerConfig: AssetPickerConfig(
         maxAssets: maxAssetsCount,
         selectedAssets: assets,
         specialItemPosition: SpecialItemPosition.prepend,
-        specialItemBuilder: (BuildContext context,
-            AssetPathEntity? path,
-            int length,) {
+        specialItemBuilder: (
+          BuildContext context,
+          AssetPathEntity? path,
+          int length,
+        ) {
           if (path?.isAll != true) {
             return null;
           }
@@ -76,9 +79,7 @@ mixin ImagePickerMixin<T extends StatefulWidget> {
               },
               child: Container(
                 padding: const EdgeInsets.all(28.0),
-                color: Theme
-                    .of(context)
-                    .dividerColor,
+                color: Theme.of(context).dividerColor,
                 child: const FittedBox(
                   fit: BoxFit.fill,
                   child: Icon(Icons.camera_enhance),
@@ -91,7 +92,8 @@ mixin ImagePickerMixin<T extends StatefulWidget> {
     );
   }
 
-  Future<void> minioUpload(List<AssetEntity> elements, String resourceId, Function(int) onSuccess) async {
+  Future<void> minioUpload(List<AssetEntity> elements, String resourceId,
+      Function(int, bool) onSuccess) async {
     // var total = elements.length;
 
     var index = 0;
@@ -99,34 +101,31 @@ mixin ImagePickerMixin<T extends StatefulWidget> {
       index++;
       var file = await element.file;
       if (null == file) return;
-      var ext = file.path
-          .split(".")
-          .last;
+      var ext = file.path.split(".").last;
       var fileName = '$index.$ext';
       if (!isImage(fileName)) {
         continue;
       }
-      minioApi.getPreassignedPutKey('$resourceId/$fileName').then((
-          singleValue) async {
-        var url = singleValue.content;
-        if (url == null) {
-          return;
-        }
+      var singleValue = await minioApi .getPreassignedPutKey('$resourceId/$fileName');
+      var url = singleValue.content;
+      if (url == null) {
+        onSuccess(index, false);
+        return;
+      }
 
-        var bytes = file.openRead();
-        var length = await file.length();
-        await dio.put(url,
-            data: bytes,
-            options: Options(
-              headers: {
-                'Content-Type': getContextType(ext),
-                'Accept': "*/*",
-                'Content-Length': length.toString(),
-                'Connection': 'keep-alive',
-              },
-            ));
-        onSuccess(index);
-      });
+      var bytes = file.openRead();
+      var length = await file.length();
+      await dio.put(url,
+          data: bytes,
+          options: Options(
+            headers: {
+              'Content-Type': getContextType(ext),
+              'Accept': "*/*",
+              'Content-Length': length.toString(),
+              'Connection': 'keep-alive',
+            },
+          ));
+      onSuccess(index, true);
     }
   }
 }

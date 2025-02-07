@@ -1,7 +1,7 @@
-import 'package:jiwa/views/mixins/login_minxin.dart';
-import 'package:jiwa/server/api/account_api.dart';
+import 'package:duowa/views/mixins/login_minxin.dart';
+import 'package:duowa/server/api/account_api.dart';
 import 'package:flutter/material.dart';
-import 'package:jiwa/views/pages/register.dart';
+import 'package:duowa/views/pages/register.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -45,6 +45,7 @@ class _LoginPageState extends State<LoginPage> with LoginMixin {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               TextFormField(
+                initialValue: '18301880898',
                 decoration: const InputDecoration(labelText: 'Email'),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -55,14 +56,16 @@ class _LoginPageState extends State<LoginPage> with LoginMixin {
                 onSaved: (value) => _mobile = value,
               ),
               const SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: _register,
-                child: const Text('注册'),
-              ),
-              ElevatedButton(
-                onPressed: _login,
-                child: const Text('Login'),
-              ),
+              Row(children: [
+                ElevatedButton(
+                  onPressed: _register,
+                  child: const Text('注册'),
+                ),
+                ElevatedButton(
+                  onPressed: _login,
+                  child: const Text('Login'),
+                ),
+              ],)
             ],
           ),
         ),

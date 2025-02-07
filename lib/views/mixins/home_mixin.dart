@@ -1,17 +1,21 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
-import 'package:jiwa/server/model/review_ai.dart';
+import 'package:duowa/server/model/review_ai.dart';
+import 'package:logger/logger.dart';
 import 'package:wechat_camera_picker/wechat_camera_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uuid/uuid.dart';
-import 'package:fbroadcast/fbroadcast.dart';
-import 'package:jiwa/server/api/review_api.dart';
+import 'package:duowa/server/api/review_api.dart';
 
 final uuid = const Uuid();
 final reviewApi = ReviewApi();
+final logger = Logger(printer: PrettyPrinter());
 
 mixin HomeMixin<T extends StatefulWidget> {
+  //
   void uploadAssignments(List<AssetEntity> assets,
-      Function(List<AssetEntity>, String, Function(int)) uploader) async {
+      Function(List<AssetEntity>, String, Function(int, bool)) uploader) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? studentId = prefs.getString('studentId');
     if (studentId == null) {
@@ -22,12 +26,17 @@ mixin HomeMixin<T extends StatefulWidget> {
 
     int count = assets.length;
 
-    Future<void> onSuccess(index) async {
+    Future<void> onSuccess(int index, bool val) async {
       // EasyLoading.show(status: "正在上传文件($index/$count)");
+      if (val) {
+        logger.i("image uploaded successfully: $index of $count");
+      } else {
+        logger.e("image uploaded failed: $index of $count");
+      }
       if (index == count) {
+        logger.i("create review request: $requestId of $studentId");
         await reviewApi.createReview(studentId, requestId);
-        FBroadcast.instance().broadcast("review_submit",
-            value: '您的作业已提交，AI正在检查您的作业，此过程大约需要1分钟,请耐心等待.');
+        index++;
       }
     }
 

@@ -1,8 +1,8 @@
 import 'package:dio/dio.dart';
-import 'package:jiwa/server/model/result.dart';
-import 'package:jiwa/views/mixins/common_mixin.dart';
-import 'package:jiwa/server/api/constants.dart';
-import 'package:jiwa/server/model/err_msg.dart';
+import 'package:duowa/server/model/result.dart';
+import 'package:duowa/views/mixins/common_mixin.dart';
+import 'package:duowa/server/api/constants.dart';
+import 'package:duowa/server/model/err_msg.dart';
 import 'package:fbroadcast/fbroadcast.dart';
 import 'package:logger/logger.dart';
 import 'dart:convert';
@@ -43,9 +43,9 @@ class AppInterceptors extends Interceptor with MessageMixin {
 
   @override
   void onResponse(
-    Response response,
-    ResponseInterceptorHandler handler,
-  ) async {
+      Response response,
+      ResponseInterceptorHandler handler,
+      ) async {
     logger.d(response);
     var map = jsonDecode(response.data);
     var result = Result.fromJson(map);

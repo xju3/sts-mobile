@@ -1,9 +1,9 @@
 import 'package:dio/dio.dart';
-import 'package:jiwa/server/model/review_ai.dart';
+import 'package:duowa/server/model/review_ai.dart';
 import 'package:retrofit/retrofit.dart';
-import 'package:jiwa/server/api/base_api.dart';
+import 'package:duowa/server/api/base_api.dart';
 
-import 'package:jiwa/server/api/constants.dart';
+import 'package:duowa/server/api/constants.dart';
 
 part 'review_api.g.dart';
 
@@ -13,10 +13,14 @@ abstract class ReviewApi extends BaseApi {
     return _ReviewApi(getDio());
   }
 
-  @POST("/review/ai/list/{studentId}")
+  @PUT("/review/ai/list/{studentId}")
   Future<List<ReviewAi>> getReviewList(@Path() String studentId);
 
   @PUT("/review/request/create/{studentId}/{requestId}")
-  Future<List<ReviewAi>> createReview(
+  Future<void> createReview(
       @Path() String studentId, @Path() String requestId);
+
+  @PUT("/review/request/create/{requestId}/{conclusion}")
+  Future<void> getReviewDetails(@Path() String requestId, @Path() String conclusion);
+
 }

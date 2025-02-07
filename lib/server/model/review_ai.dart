@@ -1,5 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
-import 'package:jiwa/server/model/review_detail.dart';
+import 'package:duowa/server/model/review_detail.dart';
 
 part 'review_ai.g.dart';
 

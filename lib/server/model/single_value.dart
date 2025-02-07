@@ -1,4 +1,4 @@
-import 'package:jiwa/server/model/err_msg.dart';
+import 'package:duowa/server/model/err_msg.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'single_value.g.dart';

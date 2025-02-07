@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:jiwa/views/widgets/draggable_button.dart';
+import 'package:duowa/views/widgets/draggable_button.dart';
 import 'package:intl/intl.dart';
 
 class DateScrollPage extends StatefulWidget {

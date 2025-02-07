@@ -1,9 +1,9 @@
 import 'package:dio/dio.dart';
-import 'package:jiwa/server/model/account.dart';
+import 'package:duowa/server/model/account.dart';
 import 'package:retrofit/retrofit.dart';
-import 'package:jiwa/server/model/registration.dart';
+import 'package:duowa/server/model/registration.dart';
 
-import 'package:jiwa/server/api/constants.dart';
+import 'package:duowa/server/api/constants.dart';
 import 'base_api.dart';
 
 part 'account_api.g.dart';

@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:jiwa/server/api/account_api.dart';
-import 'package:jiwa/server/model/account.dart';
+import 'package:duowa/server/api/account_api.dart';
+import 'package:duowa/server/model/account.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:jiwa/views/pages/home.dart';
-import 'package:jiwa/server/model/student.dart';
+import 'package:duowa/views/pages/home.dart';
 
 mixin LoginMixin<T extends StatefulWidget> {
   void loginHandler(String message, AccountApi accountApi,
@@ -18,6 +17,7 @@ mixin LoginMixin<T extends StatefulWidget> {
     var student = students[0];
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setString('studentId', student.id!);
+    await prefs.setString('studentName', student.name!);
 
     Navigator.pushReplacement(
       context,

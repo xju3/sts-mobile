@@ -14,7 +14,7 @@ class _ReviewApi implements ReviewApi {
     this.baseUrl,
     this.errorLogger,
   }) {
-    baseUrl ??= 'http://192.168.0.123:3300';
+    baseUrl ??= 'http://192.168.1.3:3300';
   }
 
   final Dio _dio;
@@ -30,7 +30,7 @@ class _ReviewApi implements ReviewApi {
     final _headers = <String, dynamic>{};
     const Map<String, dynamic>? _data = null;
     final _options = _setStreamType<List<ReviewAi>>(Options(
-      method: 'POST',
+      method: 'PUT',
       headers: _headers,
       extra: _extra,
     )
@@ -59,7 +59,7 @@ class _ReviewApi implements ReviewApi {
   }
 
   @override
-  Future<List<ReviewAi>> createReview(
+  Future<void> createReview(
     String studentId,
     String requestId,
   ) async {
@@ -67,7 +67,7 @@ class _ReviewApi implements ReviewApi {
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     const Map<String, dynamic>? _data = null;
-    final _options = _setStreamType<List<ReviewAi>>(Options(
+    final _options = _setStreamType<void>(Options(
       method: 'PUT',
       headers: _headers,
       extra: _extra,
@@ -83,17 +83,35 @@ class _ReviewApi implements ReviewApi {
           _dio.options.baseUrl,
           baseUrl,
         )));
-    final _result = await _dio.fetch<List<dynamic>>(_options);
-    late List<ReviewAi> _value;
-    try {
-      _value = _result.data!
-          .map((dynamic i) => ReviewAi.fromJson(i as Map<String, dynamic>))
-          .toList();
-    } on Object catch (e, s) {
-      errorLogger?.logError(e, s, _options);
-      rethrow;
-    }
-    return _value;
+    await _dio.fetch<void>(_options);
+  }
+
+  @override
+  Future<void> getReviewDetails(
+    String requestId,
+    String conclusion,
+  ) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    const Map<String, dynamic>? _data = null;
+    final _options = _setStreamType<void>(Options(
+      method: 'PUT',
+      headers: _headers,
+      extra: _extra,
+    )
+        .compose(
+          _dio.options,
+          '/review/request/create/${requestId}/${conclusion}',
+          queryParameters: queryParameters,
+          data: _data,
+        )
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        )));
+    await _dio.fetch<void>(_options);
   }
 
   RequestOptions _setStreamType<T>(RequestOptions requestOptions) {

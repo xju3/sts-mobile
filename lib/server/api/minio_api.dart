@@ -1,10 +1,10 @@
 import 'dart:io';
 import 'dart:async';
 import 'package:dio/dio.dart';
-import 'package:jiwa/server/model/single_value.dart';
+import 'package:duowa/server/model/single_value.dart';
 import 'package:retrofit/retrofit.dart';
-import 'package:jiwa/server/api/constants.dart';
-import 'package:jiwa/server/api/base_api.dart';
+import 'package:duowa/server/api/constants.dart';
+import 'package:duowa/server/api/base_api.dart';
 
 part 'minio_api.g.dart';
 

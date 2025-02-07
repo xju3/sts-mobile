@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:jiwa/views/pages/splash.dart';
+import 'package:duowa/views/pages/splash.dart';
+import 'package:duowa/views/pages/blank.dart';
 
 class MyApp extends StatefulWidget {
   const MyApp({super.key});
@@ -10,15 +11,19 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: '鸡娃',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-      ),
-      home: const SplashPage(),
-    );
+        title: '鸡娃',
+        theme: ThemeData(
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+          useMaterial3: true,
+        ),
+        home: const SplashPage());
   }
 }
 

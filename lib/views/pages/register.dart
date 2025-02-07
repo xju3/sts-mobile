@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:jiwa/views/mixins/login_minxin.dart';
-import 'package:jiwa/server/api/account_api.dart';
-import 'package:jiwa/server/model/registration.dart';
+import 'package:duowa/views/mixins/login_minxin.dart';
+import 'package:duowa/server/api/account_api.dart';
+import 'package:duowa/server/model/registration.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({Key? key}) : super(key: key);
@@ -52,7 +52,7 @@ class _RegisterPageState extends State<RegisterPage> with LoginMixin {
                 decoration: const InputDecoration(labelText: 'School Name'),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Please enter your school name';
+                    return 'Please enter student\'s school name';
                   }
                   return null;
                 },
@@ -62,7 +62,7 @@ class _RegisterPageState extends State<RegisterPage> with LoginMixin {
                 decoration: const InputDecoration(labelText: 'Grade'),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Please enter your grade';
+                    return 'Please enter student\'s grade';
                   }
                   return null;
                 },
@@ -80,8 +80,8 @@ class _RegisterPageState extends State<RegisterPage> with LoginMixin {
                 onSaved: (value) => _registration.mobile = value,
               ),
               TextFormField(
-                decoration: const InputDecoration(labelText: 'Password'),
-                obscureText: true,
+                decoration: const InputDecoration(labelText: 'Your Name'),
+                obscureText: false,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter your name';

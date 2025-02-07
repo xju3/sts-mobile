@@ -1,9 +1,12 @@
 import 'dart:async';
+import 'package:dio/dio.dart';
 
+import 'package:logger/logger.dart';
 import 'package:flutter/material.dart';
-import 'package:jiwa/views/pages/login.dart';
-import 'package:jiwa/views/pages/home.dart';
+import 'package:duowa/views/pages/login.dart';
+import 'package:duowa/views/pages/home.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:duowa/server/api/account_api.dart';
 
 class SplashPage extends StatefulWidget {
   const SplashPage({Key? key}) : super(key: key);
@@ -13,21 +16,24 @@ class SplashPage extends StatefulWidget {
 }
 
 class _SplashPageState extends State<SplashPage> {
-  bool _isLoggedIn = false;
+  bool _isLoggedIn = true;
+  String _studentName = "";
+  final dio = Dio();
+  final log = Logger(printer: PrettyPrinter());
+  final accountApi = AccountApi();
 
   @override
   void initState() {
     super.initState();
-    _checkLoginStatus();
     _startTimer();
   }
 
-  Future<void> _checkLoginStatus() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    setState(() {
-      _isLoggedIn = prefs.getBool('isLoggedIn') ?? false;
-    });
+
+  Future<String> checkInternetConnection() async {
+    var resp = await dio.get("https://www.baidu.com");
+    return resp.toString();
   }
+
 
   int _counter = 3;
   Timer? _timer;
@@ -38,32 +44,33 @@ class _SplashPageState extends State<SplashPage> {
     super.dispose();
   }
 
-  void _startTimer() {
-    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
-      setState(() {
+  void _startTimer() async {
+    _timer = Timer.periodic(const Duration(seconds: 1), (timer) async {
         _counter--;
         if (_counter == 0) {
           timer.cancel();
-          _navigateToPage();
+          SharedPreferences prefs = await SharedPreferences.getInstance();
+          var studentId = prefs.getString('studentId');
+          var studentName = prefs.getString('studentName') ?? "";
+          if (studentId == null) {
+            _isLoggedIn = false;
+          }
+          if (!_isLoggedIn) {
+            var resp = dio.get("https://www.baidu.com");
+            log.d(resp.toString());
+          }
+          _navigateToPage(_isLoggedIn, studentName);
         }
-      });
+        setState(() { });
     });
   }
 
-  void _navigateToPage() {
+  void _navigateToPage(isLoggedIn, studentName) {
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(
           builder: (context) =>
-              _isLoggedIn ? const HomePage(title: '鸡娃') : const LoginPage()),
-    );
-  }
-
-  Future<void> _navigateToLogin() async {
-    await Future.delayed(const Duration(seconds: 3)); // Simulate a delay
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(builder: (context) => const LoginPage()),
+          isLoggedIn ? HomePage(title: _studentName) : const LoginPage()),
     );
   }
 
@@ -74,7 +81,7 @@ class _SplashPageState extends State<SplashPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text("启动页，会放一些操作指导，或宣传信息"),
+            Text("启动页，会放一些操作指导，或宣传信息($_counter)"),
             const SizedBox(height: 20),
             const CircularProgressIndicator(), // Or a simple text like "Loading..."
           ],
