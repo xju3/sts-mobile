@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:duowa/server/model/review_detail.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:duowoo/server/model/review_detail.dart';
 
 class ReviewDetailCard extends StatelessWidget {
   final ReviewDetail detail;
@@ -41,7 +40,7 @@ class ReviewDetailCard extends StatelessWidget {
             // 题号
             Text(
               '第${detail.no}题',
-              style: GoogleFonts.notoSans(
+              style:TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
                 color: Colors.black87,
@@ -53,15 +52,13 @@ class ReviewDetailCard extends StatelessWidget {
             _buildSection(
               '你的答案:',
               detail.ansStudent ?? '未作答',
-              detail.conclusion == 0 ? Colors.grey : Colors.black87,
+              detail.conclusion != 1 ? Colors.grey : Colors.green,
             ),
 
             // 正确答案
-            _buildSection('正确答案:', detail.ansAi ?? ''),
-
+            _buildSection('正确答案:', detail.ansAi ?? '', Colors.green),
             // 解题方法
             _buildSection('解题方法:', detail.solution ?? ''),
-
             // 如果答案错误，显示原因分析
             if (!isCorrect && detail.reason != null)
               _buildSection('错误分析:', detail.reason!),
@@ -87,20 +84,16 @@ class ReviewDetailCard extends StatelessWidget {
         children: [
           Text(
             title,
-            style: GoogleFonts.notoSans(
-              fontSize: 16,
+            style:TextStyle(  fontSize: 16,
               fontWeight: FontWeight.w600,
-              color: Colors.black87,
-            ),
+              color: Colors.black87,),
           ),
           SizedBox(height: 4),
           Text(
             content,
-            style: GoogleFonts.notoSans(
-              fontSize: 15,
+            style: TextStyle(  fontSize: 15,
               color: contentColor ?? Colors.black87,
-              height: 1.5,
-            ),
+              height: 1.5,),
           ),
         ],
       ),
@@ -118,7 +111,7 @@ class ReviewDetailCard extends StatelessWidget {
         children: [
           Text(
             '相关知识点:',
-            style: GoogleFonts.notoSans(
+            style:TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.w600,
               color: Colors.black87,
@@ -147,7 +140,7 @@ class ReviewDetailCard extends StatelessWidget {
       ),
       child: Text(
         tag,
-        style: GoogleFonts.notoSans(
+        style:TextStyle(
           fontSize: 14,
           color: Colors.blue.shade700,
         ),

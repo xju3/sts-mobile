@@ -1,4 +1,4 @@
-import 'package:duowa/server/model/student.dart';
+import 'package:duowoo/server/model/student.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'account.g.dart';

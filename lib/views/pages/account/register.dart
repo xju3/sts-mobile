@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:duowa/views/mixins/login_minxin.dart';
-import 'package:duowa/server/api/account_api.dart';
-import 'package:duowa/server/model/registration.dart';
+import 'package:duowoo/views/mixins/login_minxin.dart';
+import 'package:duowoo/server/api/account_api.dart';
+import 'package:duowoo/server/model/registration.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({Key? key}) : super(key: key);

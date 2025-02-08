@@ -3,10 +3,10 @@ import 'package:dio/dio.dart';
 
 import 'package:logger/logger.dart';
 import 'package:flutter/material.dart';
-import 'package:duowa/views/pages/account/login.dart';
-import 'package:duowa/views/pages/review/home.dart';
+import 'package:duowoo/views/pages/account/login.dart';
+import 'package:duowoo/views/pages/review/home.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:duowa/server/api/account_api.dart';
+import 'package:duowoo/server/api/account_api.dart';
 
 class SplashPage extends StatefulWidget {
   const SplashPage({Key? key}) : super(key: key);
@@ -17,7 +17,6 @@ class SplashPage extends StatefulWidget {
 
 class _SplashPageState extends State<SplashPage> {
   bool _isLoggedIn = true;
-  String _studentName = "";
   final dio = Dio();
   final log = Logger(printer: PrettyPrinter());
   final accountApi = AccountApi();
@@ -56,7 +55,7 @@ class _SplashPageState extends State<SplashPage> {
             _isLoggedIn = false;
           }
           if (!_isLoggedIn) {
-            var resp = dio.get("https://www.baidu.com");
+            var resp = await dio.get("https://www.baidu.com");
             log.d(resp.toString());
           }
           _navigateToPage(_isLoggedIn, studentName);
@@ -70,7 +69,7 @@ class _SplashPageState extends State<SplashPage> {
       context,
       MaterialPageRoute(
           builder: (context) =>
-          isLoggedIn ? HomePage(title: _studentName) : const LoginPage()),
+          isLoggedIn ? HomePage(title: studentName) : const LoginPage()),
     );
   }
 

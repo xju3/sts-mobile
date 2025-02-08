@@ -1,6 +1,6 @@
 
 import 'package:dio/dio.dart';
-import 'package:duowa/server/api/dio_interceptors.dart';
+import 'package:duowoo/server/api/dio_interceptors.dart';
 import 'package:logger/logger.dart';
 
 

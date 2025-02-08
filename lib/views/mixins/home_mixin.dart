@@ -1,12 +1,12 @@
 import 'dart:ffi';
 
 import 'package:flutter/material.dart';
-import 'package:duowa/server/model/review_ai.dart';
+import 'package:duowoo/server/model/review_ai.dart';
 import 'package:logger/logger.dart';
 import 'package:wechat_camera_picker/wechat_camera_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uuid/uuid.dart';
-import 'package:duowa/server/api/review_api.dart';
+import 'package:duowoo/server/api/review_api.dart';
 
 final uuid = const Uuid();
 final reviewApi = ReviewApi();

@@ -2,7 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
 import 'package:uuid/uuid.dart';
-import 'package:duowa/server/api/minio_api.dart';
+import 'package:duowoo/server/api/minio_api.dart';
 import 'package:wechat_assets_picker/wechat_assets_picker.dart';
 import 'package:wechat_camera_picker/wechat_camera_picker.dart';
 

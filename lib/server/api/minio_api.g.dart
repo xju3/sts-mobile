@@ -14,7 +14,7 @@ class _MinioApi implements MinioApi {
     this.baseUrl,
     this.errorLogger,
   }) {
-    baseUrl ??= 'http://192.168.0.123:3300';
+    baseUrl ??= 'http://192.168.1.3:3300';
   }
 
   final Dio _dio;

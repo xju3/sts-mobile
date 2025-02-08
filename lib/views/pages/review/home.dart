@@ -1,12 +1,13 @@
-import 'package:duowa/views/pages/review/detail.dart';
+import 'package:duowoo/views/mixins/common_mixin.dart';
+import 'package:duowoo/views/pages/review/detail.dart';
 import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
 import 'package:wechat_camera_picker/wechat_camera_picker.dart';
 import 'package:wechat_assets_picker/wechat_assets_picker.dart';
-import 'package:duowa/views/mixins/image_picker_mixin.dart';
-import 'package:duowa/views/mixins/home_mixin.dart';
-import 'package:duowa/server/api/review_api.dart';
-import 'package:duowa/views/cards/review/review_info.dart';
+import 'package:duowoo/views/mixins/image_picker_mixin.dart';
+import 'package:duowoo/views/mixins/home_mixin.dart';
+import 'package:duowoo/server/api/review_api.dart';
+import 'package:duowoo/views/cards/review/review_info.dart';
 
 import '../../../server/model/review_ai.dart';
 
@@ -18,7 +19,7 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> with ImagePickerMixin, HomeMixin {
+class _HomePageState extends State<HomePage> with ImagePickerMixin, HomeMixin, StringMixin {
   var logger = Logger(printer: PrettyPrinter());
   final reviewApi = ReviewApi();
   void handleImageSelection(BuildContext context, AssetEntity asset) {
@@ -28,10 +29,10 @@ class _HomePageState extends State<HomePage> with ImagePickerMixin, HomeMixin {
   @override
   void initState() {
     super.initState();
+    logger.d(widget.title);
     getReviewList().then((value) {
-      setState(() {
-        reviews = value;
-      });
+      reviews = value;
+      setState(() { });
     });
   }
 
@@ -48,7 +49,7 @@ class _HomePageState extends State<HomePage> with ImagePickerMixin, HomeMixin {
     if (details == null || details.isEmpty) {
       return;
     }
-    Navigator.pushReplacement(context, MaterialPageRoute( builder: (context) => ReviewDetailPage(details) ));
+    Navigator.push(context, MaterialPageRoute( builder: (context) => ReviewDetailPage(getDateTime(review.transTime), details, conclusion) ));
   }
   // void showReviewDetail(List<ReviewDetail> details) {}
 
@@ -59,13 +60,7 @@ class _HomePageState extends State<HomePage> with ImagePickerMixin, HomeMixin {
           backgroundColor: Theme.of(context).colorScheme.inversePrimary,
           title: Text(widget.title),
         ),
-        body: GridView(
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            childAspectRatio: 1.5,
-            crossAxisSpacing: 1.0,
-            mainAxisSpacing: 1.0,
-            crossAxisCount: 1,
-          ),
+        body:ListView(
           children:
               reviews.map((e) => ReviewCard(e, showReviewDetail)).toList(),
         ),

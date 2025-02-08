@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:duowa/server/api/account_api.dart';
-import 'package:duowa/server/model/account.dart';
+import 'package:duowoo/server/api/account_api.dart';
+import 'package:duowoo/server/model/account.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:duowa/views/pages/review/home.dart';
+import 'package:duowoo/views/pages/review/home.dart';
 
 mixin LoginMixin<T extends StatefulWidget> {
   void loginHandler(String message, AccountApi accountApi,

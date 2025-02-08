@@ -1,9 +1,8 @@
 import 'package:dio/dio.dart';
-import 'package:duowa/server/model/review_ai.dart';
+import 'package:duowoo/server/model/review_ai.dart';
 import 'package:retrofit/retrofit.dart';
-import 'package:duowa/server/api/base_api.dart';
-
-import 'package:duowa/server/api/constants.dart';
+import 'package:duowoo/server/api/base_api.dart';
+import 'package:duowoo/server/api/constants.dart';
 
 part 'review_api.g.dart';
 

@@ -1,4 +1,4 @@
-package com.aeons.jiwa
+package com.aeons.duowoo
 
 import io.flutter.embedding.android.FlutterActivity
 

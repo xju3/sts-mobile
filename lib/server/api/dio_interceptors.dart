@@ -1,8 +1,8 @@
 import 'package:dio/dio.dart';
-import 'package:duowa/server/model/result.dart';
-import 'package:duowa/views/mixins/common_mixin.dart';
-import 'package:duowa/server/api/constants.dart';
-import 'package:duowa/server/model/err_msg.dart';
+import 'package:duowoo/server/model/result.dart';
+import 'package:duowoo/views/mixins/common_mixin.dart';
+import 'package:duowoo/server/api/constants.dart';
+import 'package:duowoo/server/model/err_msg.dart';
 import 'package:fbroadcast/fbroadcast.dart';
 import 'package:logger/logger.dart';
 import 'dart:convert';

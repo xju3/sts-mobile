@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:duowa/server/model/review_ai.dart';
+import 'package:duowoo/server/model/review_ai.dart';
 
 final Map<String, Color> subjectColors = {
   '语文': Color(0xFFF0F0F0),
