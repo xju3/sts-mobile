@@ -10,6 +10,7 @@ class ReviewDetail {
   final String? ansStudent;
   final String? ansAi;
   final int? conclusion;
+  final String? reason;
   final String? solution;
   final String? knowledge;
   final String? suggestion;
@@ -21,6 +22,7 @@ class ReviewDetail {
       this.ansStudent,
       this.ansAi,
       this.conclusion,
+      this.reason,
       this.solution,
       this.knowledge,
       this.suggestion});

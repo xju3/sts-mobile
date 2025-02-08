@@ -1,7 +1,7 @@
 import 'package:duowa/views/mixins/login_minxin.dart';
 import 'package:duowa/server/api/account_api.dart';
 import 'package:flutter/material.dart';
-import 'package:duowa/views/pages/register.dart';
+import 'package:duowa/views/pages/account/register.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);

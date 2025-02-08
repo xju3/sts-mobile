@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-
-import '../../server/model/review_ai.dart';
-import '../../server/model/review_detail.dart';
+import 'package:duowa/server/model/review_ai.dart';
 
 final Map<String, Color> subjectColors = {
   '语文': Color(0xFFF0F0F0),
@@ -13,8 +11,24 @@ final Map<String, Color> subjectColors = {
 
 class ReviewCard extends StatelessWidget {
   final ReviewAi review;
-  final Function(List<ReviewDetail>) showReviewDetails;
-  const ReviewCard(this.review, this.showReviewDetails,  {Key? key}) : super(key: key);
+  final Function(ReviewAi, int, int) showReviewDetails;
+
+  const ReviewCard(
+    this.review,
+    this.showReviewDetails, {
+    Key? key,
+  }) : super(key: key);
+
+
+  void onCorrectButtonTapped(){
+    showReviewDetails(review, 1, review.correct ?? 0);
+  }
+  void onInCorrectButtonTapped(){
+    showReviewDetails(review, -1, review.incorrect ?? 0);
+  }
+  void onUncertainButtonTapped(){
+    showReviewDetails(review, 0, review.uncertain?? 0);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -45,22 +59,20 @@ class ReviewCard extends StatelessWidget {
                 ),
                 Row(
                   children: [
-                    _buildStatChip('正确', review.correct ?? 0, Colors.green),
+                    _buildStatChip('正确', review.correct ?? 0, Colors.green, onCorrectButtonTapped),
                     SizedBox(width: 8),
-                    _buildStatChip('错误', review.incorrect ?? 0, Colors.red),
+                    _buildStatChip('错误', review.incorrect ?? 0, Colors.red, onInCorrectButtonTapped),
                     SizedBox(width: 8),
-                    _buildStatChip('未答', review.uncertain ?? 0, Colors.grey),
+                    _buildStatChip('未答', review.uncertain ?? 0, Colors.grey, onUncertainButtonTapped),
                   ],
                 ),
               ],
             ),
             SizedBox(height: 12),
-
-            // 优化Summary显示
             ConstrainedBox(
               constraints: BoxConstraints(
-                maxHeight: 150,  // 限制最大高度
-                minHeight: 50,   // 最小高度
+                maxHeight: 150,
+                minHeight: 50,
               ),
               child: SingleChildScrollView(
                 child: Text(
@@ -80,35 +92,50 @@ class ReviewCard extends StatelessWidget {
     );
   }
 
-  Widget _buildStatChip(String label, int value, Color color) {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-      decoration: BoxDecoration(
-        color: color.withOpacity(0.2),
+  Widget _buildStatChip(String label, int value, Color color, VoidCallback? onTap) {
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: onTap,
         borderRadius: BorderRadius.circular(10),
-      ),
-      child: Text(
-        '$label: $value',
-        style: TextStyle(
-          color: color,
-          fontWeight: FontWeight.bold,
+        child: Ink(
+          padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+          decoration: BoxDecoration(
+            color: color.withOpacity(0.2),
+            borderRadius: BorderRadius.circular(10),
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                '$label: $value',
+                style: TextStyle(
+                  color: color,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
   }
 
   Widget _buildTimeFooter() {
-    // 计算AI分析用时（分钟和秒）
     final duration = review.endTime?.difference(review.startTime!);
-    final minutes = duration!.inMinutes;
-    final seconds = duration.inSeconds % 60;
+    final minutes = duration?.inMinutes;
+    int? inSeconds = duration?.inSeconds;
+    int seconds = 0;
+    if (inSeconds != null) {
+      seconds = inSeconds % 60;
+    }
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(
           '完成时间: ${review.transTime?.year}-${review.transTime?.month}-${review.transTime?.day} '
-              '${review.transTime?.hour}:${review.transTime?.minute}',
+          '${review.transTime?.hour}:${review.transTime?.minute}',
           style: TextStyle(
             fontSize: 12,
             color: Colors.black54,

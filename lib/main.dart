@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:duowa/views/pages/splash.dart';
-import 'package:duowa/views/pages/blank.dart';
+import 'package:duowa/views/pages/account/splash.dart';
 
 class MyApp extends StatefulWidget {
   const MyApp({super.key});

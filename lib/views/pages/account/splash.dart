@@ -3,8 +3,8 @@ import 'package:dio/dio.dart';
 
 import 'package:logger/logger.dart';
 import 'package:flutter/material.dart';
-import 'package:duowa/views/pages/login.dart';
-import 'package:duowa/views/pages/home.dart';
+import 'package:duowa/views/pages/account/login.dart';
+import 'package:duowa/views/pages/review/home.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:duowa/server/api/account_api.dart';
 
