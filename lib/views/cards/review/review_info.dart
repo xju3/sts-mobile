@@ -54,6 +54,7 @@ class ReviewCard extends StatelessWidget {
                   review.subject ?? "",
                   style: TextStyle(
                     fontSize: 20,
+                    color: Colors.black26,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -61,9 +62,9 @@ class ReviewCard extends StatelessWidget {
                   children: [
                     _buildStatChip('正确', review.correct ?? 0, Colors.green, onCorrectButtonTapped),
                     SizedBox(width: 8),
-                    _buildStatChip('错误', review.incorrect ?? 0, Colors.red, onInCorrectButtonTapped),
-                    SizedBox(width: 8),
                     _buildStatChip('未答', review.uncertain ?? 0, Colors.grey, onUncertainButtonTapped),
+                    SizedBox(width: 8),
+                    _buildStatChip('错误', review.incorrect ?? 0, Colors.red, onInCorrectButtonTapped),
                   ],
                 ),
               ],
@@ -138,14 +139,14 @@ class ReviewCard extends StatelessWidget {
           '${review.transTime?.hour}:${review.transTime?.minute}',
           style: TextStyle(
             fontSize: 12,
-            color: Colors.black54,
+            color: Colors.black12,
           ),
         ),
         Text(
           'AI用时: $minutes分$seconds秒',
           style: TextStyle(
             fontSize: 12,
-            color: Colors.black38,
+            color: Colors.black12,
           ),
         ),
       ],

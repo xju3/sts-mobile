@@ -14,7 +14,7 @@ final logger = Logger(printer: PrettyPrinter());
 
 mixin HomeMixin<T extends StatefulWidget> {
   //
-  void uploadAssignments(List<AssetEntity> assets,
+  Future<void> uploadAssignments(List<AssetEntity> assets,
       Function(List<AssetEntity>, String, Function(int, bool)) uploader) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? studentId = prefs.getString('studentId');

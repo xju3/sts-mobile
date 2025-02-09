@@ -41,7 +41,9 @@ mixin ImagePickerMixin<T extends StatefulWidget> {
 
   String getContextType(String ext) {
     if (['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp']
-        .contains(ext.toLowerCase())) return "image/$ext";
+        .contains(ext.toLowerCase())) {
+      return "image/$ext";
+    }
     return "video/$ext";
   }
 

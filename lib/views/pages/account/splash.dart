@@ -1,10 +1,10 @@
 import 'dart:async';
 import 'package:dio/dio.dart';
+import 'package:duowoo/views/pages/home.dart';
 
 import 'package:logger/logger.dart';
 import 'package:flutter/material.dart';
 import 'package:duowoo/views/pages/account/login.dart';
-import 'package:duowoo/views/pages/review/home.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:duowoo/server/api/account_api.dart';
 
@@ -69,7 +69,7 @@ class _SplashPageState extends State<SplashPage> {
       context,
       MaterialPageRoute(
           builder: (context) =>
-          isLoggedIn ? HomePage(title: studentName) : const LoginPage()),
+          isLoggedIn ? HomePage() : const LoginPage()),
     );
   }
 

@@ -14,7 +14,7 @@ class _AccountApi implements AccountApi {
     this.baseUrl,
     this.errorLogger,
   }) {
-    baseUrl ??= 'http://192.168.1.3:3300';
+    baseUrl ??= 'http://api.aeons.me';
   }
 
   final Dio _dio;
