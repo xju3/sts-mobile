@@ -6,13 +6,13 @@ import 'package:socket_io_client/socket_io_client.dart' as IO;
 mixin SocketIoMixin<T extends StatefulWidget> {
   late IO.Socket socket;
 
-  void sayGoodBye() {
+  void mxSayGoodBye() {
     if (socket.active) {
       socket.close();
     }
   }
 
-  void startSocketConnection(
+  void mxStartSocketConnection(
       String ticketId,
       Function(dynamic) messageHandler,
       Function onDisconnect,

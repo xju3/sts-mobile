@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:app_settings/app_settings.dart';
 import 'package:duowoo/views/pages/account/splash.dart';
-import 'dart:async';
-import 'package:flutter/services.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 
 class MyApp extends StatefulWidget {
   const MyApp({super.key});
@@ -14,6 +14,7 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
+    // AppSettings.openAppSettings();
   }
 
   @override
@@ -24,6 +25,7 @@ class _MyAppState extends State<MyApp> {
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
           useMaterial3: true,
         ),
+        builder: EasyLoading.init(),
         home: const SplashPage());
   }
 }

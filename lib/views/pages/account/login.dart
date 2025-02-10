@@ -1,5 +1,11 @@
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
+import 'package:dio/dio.dart';
+import 'package:duowoo/server/model/login.dart';
+import 'package:duowoo/views/forms/login.dart';
+import 'package:duowoo/views/mixins/common_mixin.dart';
 import 'package:duowoo/views/mixins/login_minxin.dart';
 import 'package:duowoo/server/api/account_api.dart';
+import 'package:duowoo/views/mixins/message_mixin.dart';
 import 'package:flutter/material.dart';
 import 'package:duowoo/views/pages/account/register.dart';
 
@@ -10,23 +16,27 @@ class LoginPage extends StatefulWidget {
   State<LoginPage> createState() => _LoginPageState();
 }
 
-class _LoginPageState extends State<LoginPage> with LoginMixin {
+class _LoginPageState extends State<LoginPage> with LoginMixin, MessageMixin {
   final _formKey = GlobalKey<FormState>();
   final _accountApi = AccountApi();
-  String? _mobile = '18301880898';
+  final _login = Login();
 
   void _register() {
-    Navigator.pushReplacement(
+    Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => const RegisterPage()),
     );
   }
 
-  void _login() {
+  void onAccountNotFound() {
+    mxShowSnackbar("账号不存在，请检查您输入的账号信息是否有误.", ContentType.failure, context);
+  }
+
+  void _submit() {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
-      _accountApi.login(_mobile).then((accountInfo) async {
-        loginHandler("login successfully", _accountApi, accountInfo, context);
+      _accountApi.login(_login).then((accountInfo) async {
+        mxLoginHandler(_accountApi, accountInfo, context, onAccountNotFound);
       });
     }
   }
@@ -38,38 +48,13 @@ class _LoginPageState extends State<LoginPage> with LoginMixin {
         title: const Text('Login'),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              TextFormField(
-                initialValue: '18301880898',
-                decoration: const InputDecoration(labelText: 'Email'),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter your phone number';
-                  }
-                  return null;
-                },
-                onSaved: (value) => _mobile = value,
-              ),
-              const SizedBox(height: 20),
-              Row(children: [
-                ElevatedButton(
-                  onPressed: _register,
-                  child: const Text('注册'),
-                ),
-                ElevatedButton(
-                  onPressed: _login,
-                  child: const Text('Login'),
-                ),
-              ],)
-            ],
-          ),
-        ),
-      ),
+          padding: const EdgeInsets.all(16.0),
+          child: LoginForm(
+            formKey: _formKey,
+            onRegister: _register,
+            onLogin: _submit,
+            login: _login,
+          )),
     );
   }
 }

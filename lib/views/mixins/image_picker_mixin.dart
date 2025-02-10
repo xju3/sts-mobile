@@ -25,21 +25,21 @@ mixin ImagePickerMixin<T extends StatefulWidget> {
     );
   }
 
-  bool isImage(String url) {
+  bool _isImage(String url) {
     var ext = url.split('.').last;
     if (['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp']
         .contains(ext.toLowerCase())) return true;
     return false;
   }
 
-  String getImageUrl(String url) {
-    if (!isImage(url)) {
+  String _getImageUrl(String url) {
+    if (!_isImage(url)) {
       return url.toLowerCase().replaceAll(".mp4", '_video.png');
     }
     return url;
   }
 
-  String getContextType(String ext) {
+  String _getContextType(String ext) {
     if (['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp']
         .contains(ext.toLowerCase())) {
       return "image/$ext";
@@ -47,7 +47,7 @@ mixin ImagePickerMixin<T extends StatefulWidget> {
     return "video/$ext";
   }
 
-  Future<List<AssetEntity>?> openPicker(
+  Future<List<AssetEntity>?> mxOpenPicker(
     BuildContext context,
     int maxAssetsCount,
     Function(BuildContext, AssetEntity) handleResult,
@@ -94,7 +94,7 @@ mixin ImagePickerMixin<T extends StatefulWidget> {
     );
   }
 
-  Future<void> minioUpload(List<AssetEntity> elements, String resourceId,
+  Future<void> mxMinioUpload(List<AssetEntity> elements, String resourceId,
       Function(int, bool) onSuccess) async {
     // var total = elements.length;
 
@@ -105,10 +105,11 @@ mixin ImagePickerMixin<T extends StatefulWidget> {
       if (null == file) return;
       var ext = file.path.split(".").last;
       var fileName = '$index.$ext';
-      if (!isImage(fileName)) {
+      if (!_isImage(fileName)) {
         continue;
       }
-      var singleValue = await minioApi .getPreassignedPutKey('$resourceId/$fileName');
+      var singleValue =
+          await minioApi.getPreassignedPutKey('$resourceId/$fileName');
       var url = singleValue.content;
       if (url == null) {
         onSuccess(index, false);
@@ -121,7 +122,7 @@ mixin ImagePickerMixin<T extends StatefulWidget> {
           data: bytes,
           options: Options(
             headers: {
-              'Content-Type': getContextType(ext),
+              'Content-Type': _getContextType(ext),
               'Accept': "*/*",
               'Content-Length': length.toString(),
               'Connection': 'keep-alive',

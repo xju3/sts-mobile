@@ -20,7 +20,7 @@ class _ReviewDetailPageState extends State<ReviewDetailPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: CustomAppBar(widget.date, []),
+        appBar: CustomAppBar(widget.date, [], true),
         drawer: CustomDraw(),
         body: ListView(
             children: widget.details.map((e) => ReviewDetailCard(e)).toList()));

@@ -2,12 +2,18 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>请务必允许我们使用您的当前位置，以查找周边的学校，当你注册完成后，即可关闭此项授权，我们的程序也不再使用位置相关数据</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>请务必允许我们使用您的当前位置，以查找周边的学校，当你注册完成后，即可关闭此项授权，我们的程序也不再使用位置相关数据</string>
+	<key>NSLocationDefaultAccuracyReduced</key>
+	<true/>
 	<key>CADisableMinimumFrameDurationOnPhone</key>
 	<true/>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
-	<string>duowa</string>
+	<string>Duowoo</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -15,7 +21,7 @@
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
-	<string>duowa</string>
+	<string>com.aeons.duowoo</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
@@ -37,6 +43,8 @@
 	<string>Our app will uses bluetooth to find local printer </string>
 	<key>NSCameraUsageDescription</key>
 	<string>拍摄试卷照片</string>
+	<key>NSLocalNetworkUsageDescription</key>
+	<string>Access the network</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>与AI机器人对话</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>

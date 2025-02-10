@@ -1,5 +1,6 @@
 import 'package:duowoo/views/pages/home.dart';
 import 'package:duowoo/views/pages/review/review.dart';
+import 'package:duowoo/views/pages/settings/home.dart';
 import 'package:flutter/material.dart';
 
 class CustomDraw extends StatelessWidget {
@@ -56,10 +57,13 @@ class CustomDraw extends StatelessWidget {
             leading: Icon(Icons.crop_square),
             title: Text('广场'),
           ),
-          ListTile(
-            leading: Icon(Icons.settings),
-            title: Text('设置'),
-          ),
+          GestureDetector(
+            child: ListTile(
+              leading: Icon(Icons.settings),
+              title: Text('设置'),
+            ),
+            onTap: () => goto(context, SettingPage()),
+          )
         ],
       ),
     );

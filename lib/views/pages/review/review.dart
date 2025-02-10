@@ -1,4 +1,6 @@
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:duowoo/views/mixins/common_mixin.dart';
+import 'package:duowoo/views/mixins/message_mixin.dart';
 import 'package:duowoo/views/pages/review/detail.dart';
 import 'package:duowoo/views/widgets/app_bar.dart';
 import 'package:duowoo/views/widgets/menu_draw.dart';
@@ -23,7 +25,7 @@ class ReviewPage extends StatefulWidget {
 }
 
 class _ReviewPageState extends State<ReviewPage>
-    with ImagePickerMixin, HomeMixin, StringMixin {
+    with ImagePickerMixin, HomeMixin, StringMixin, MessageMixin {
   var logger = Logger(printer: PrettyPrinter());
   final reviewApi = ReviewApi();
 
@@ -36,15 +38,16 @@ class _ReviewPageState extends State<ReviewPage>
 
   void _onRefresh() async {
     await Future.delayed(Duration(milliseconds: 1000));
-    await getReviewList().then((value) {
-      reviews = value;
+    await mxGetReviewList().then((value) {
+      setState(() {
+        reviews = value;
+      });
     });
     _refreshController.refreshCompleted();
   }
 
   void _onLoading() async {
     await Future.delayed(Duration(milliseconds: 1000));
-
     if (mounted) setState(() {});
     _refreshController.loadComplete();
   }
@@ -54,17 +57,22 @@ class _ReviewPageState extends State<ReviewPage>
   @override
   void initState() {
     super.initState();
-    getReviewList().then((value) {
+    mxGetReviewList().then((value) {
       reviews = value;
       setState(() {});
     });
   }
 
+  void showSnackbar() {
+    mxShowSnackbar(
+        "AI正在批改本次作业，此过程大约需要1～2分钟，任务完成后，您会收到系统通知.", ContentType.success, context);
+  }
+
   void selectImages() async {
     List<AssetEntity>? assets =
-        await openPicker(context, 9, handleImageSelection);
+        await mxOpenPicker(context, 9, handleImageSelection);
     if (assets == null) return;
-    await uploadAssignments(assets, minioUpload);
+    mxUploadAssignments(assets, mxMinioUpload, showSnackbar).then((val) {});
   }
 
   void showReviewDetail(ReviewAi review, int conclusion, int total) {
@@ -79,7 +87,7 @@ class _ReviewPageState extends State<ReviewPage>
         context,
         MaterialPageRoute(
             builder: (context) => ReviewDetailPage(
-                getDateTime(review.transTime), details, conclusion)));
+                mxGetDateTime(review.transTime), details, conclusion)));
   }
 
   List<Widget> getActions() {
@@ -96,7 +104,7 @@ class _ReviewPageState extends State<ReviewPage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar("作业", getActions()),
+      appBar: CustomAppBar("作业", getActions(), true),
       drawer: CustomDraw(),
       body: SmartRefresher(
         enablePullDown: true,

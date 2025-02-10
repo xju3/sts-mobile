@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:dio/dio.dart';
 import 'package:duowoo/views/pages/home.dart';
+import 'package:duowoo/views/pages/review/review.dart';
 
 import 'package:logger/logger.dart';
 import 'package:flutter/material.dart';
@@ -55,8 +56,12 @@ class _SplashPageState extends State<SplashPage> {
             _isLoggedIn = false;
           }
           if (!_isLoggedIn) {
-            var resp = await dio.get("https://www.baidu.com");
-            log.d(resp.toString());
+            try {
+              var resp = await dio.get("https://www.baidu.com/");
+              log.d(resp.toString());
+            } catch (e) {
+              log.d('发生了错误: $e');
+            }
           }
           _navigateToPage(_isLoggedIn, studentName);
         }
@@ -69,7 +74,7 @@ class _SplashPageState extends State<SplashPage> {
       context,
       MaterialPageRoute(
           builder: (context) =>
-          isLoggedIn ? HomePage() : const LoginPage()),
+          isLoggedIn ? ReviewPage() : const LoginPage()),
     );
   }
 

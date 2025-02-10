@@ -1,12 +1,12 @@
 import 'package:dio/dio.dart';
 import 'package:duowoo/server/model/result.dart';
-import 'package:duowoo/views/mixins/common_mixin.dart';
 import 'package:duowoo/server/api/constants.dart';
-import 'package:duowoo/server/model/err_msg.dart';
 import 'package:fbroadcast/fbroadcast.dart';
 import 'package:logger/logger.dart';
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../../views/mixins/message_mixin.dart';
 
 class AppInterceptors extends Interceptor with MessageMixin {
   final Logger logger = Logger(printer: PrettyPrinter());

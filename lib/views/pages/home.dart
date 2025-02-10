@@ -16,6 +16,6 @@ class _HomePageState extends State<HomePage>
     with ImagePickerMixin, HomeMixin, StringMixin {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(appBar: CustomAppBar("首页", []), drawer: CustomDraw(), body: Text("hello."));
+    return Scaffold(appBar: CustomAppBar("首页", [], true), drawer: CustomDraw(), body: Text("hello."));
   }
 }

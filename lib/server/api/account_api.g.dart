@@ -14,7 +14,7 @@ class _AccountApi implements AccountApi {
     this.baseUrl,
     this.errorLogger,
   }) {
-    baseUrl ??= 'http://api.aeons.me';
+    baseUrl ??= 'http://192.168.0.123:3300';
   }
 
   final Dio _dio;
@@ -24,11 +24,12 @@ class _AccountApi implements AccountApi {
   final ParseErrorLogger? errorLogger;
 
   @override
-  Future<AccountInfo> login(dynamic mobile) async {
+  Future<AccountInfo> login(Login login) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
-    final _data = {'mobile': mobile};
+    final _data = <String, dynamic>{};
+    _data.addAll(login.toJson());
     final _options = _setStreamType<AccountInfo>(Options(
       method: 'POST',
       headers: _headers,
@@ -83,6 +84,44 @@ class _AccountApi implements AccountApi {
     late AccountInfo _value;
     try {
       _value = AccountInfo.fromJson(_result.data!);
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options);
+      rethrow;
+    }
+    return _value;
+  }
+
+  @override
+  Future<List<School>> getSchools(
+    double lat,
+    double lng,
+  ) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    const Map<String, dynamic>? _data = null;
+    final _options = _setStreamType<List<School>>(Options(
+      method: 'PUT',
+      headers: _headers,
+      extra: _extra,
+    )
+        .compose(
+          _dio.options,
+          '/account/schools/${lat}/${lng}',
+          queryParameters: queryParameters,
+          data: _data,
+        )
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        )));
+    final _result = await _dio.fetch<List<dynamic>>(_options);
+    late List<School> _value;
+    try {
+      _value = _result.data!
+          .map((dynamic i) => School.fromJson(i as Map<String, dynamic>))
+          .toList();
     } on Object catch (e, s) {
       errorLogger?.logError(e, s, _options);
       rethrow;

@@ -14,7 +14,7 @@ class _ReviewApi implements ReviewApi {
     this.baseUrl,
     this.errorLogger,
   }) {
-    baseUrl ??= 'http://api.aeons.me';
+    baseUrl ??= 'http://192.168.0.123:3300';
   }
 
   final Dio _dio;

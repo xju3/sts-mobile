@@ -8,9 +8,11 @@ class Registration {
   String? mobile;
   String? student;
   String? grade;
+  String? schoolId;
   String? school;
 
   Registration({
+    this.schoolId,
     this.school,
     this.parent,
     this.mobile,
