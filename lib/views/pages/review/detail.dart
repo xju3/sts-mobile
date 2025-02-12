@@ -21,7 +21,7 @@ class _ReviewDetailPageState extends BasePage<ReviewDetailPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: CustomAppBar(widget.date, [], true),
+        appBar: CustomAppBar(widget.date, [], false),
         drawer: CustomDraw(),
         body: ListView(
             children: widget.details.map((e) => ReviewDetailCard(e)).toList()));

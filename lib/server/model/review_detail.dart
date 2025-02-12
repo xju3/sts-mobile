@@ -8,6 +8,8 @@ class ReviewDetail {
   final String? aiReviewId;
   final String? no;
   final String? ansStudent;
+  final String? question;
+  final String? options;
   final String? ansAi;
   final int? conclusion;
   final String? reason;
@@ -19,6 +21,8 @@ class ReviewDetail {
       {this.id,
       this.aiReviewId,
       this.no,
+      this.question,
+      this.options,
       this.ansStudent,
       this.ansAi,
       this.conclusion,

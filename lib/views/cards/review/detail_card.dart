@@ -1,10 +1,13 @@
+import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:duowoo/server/model/review_detail.dart';
 
 class ReviewDetailCard extends StatelessWidget {
   final ReviewDetail detail;
 
-  const ReviewDetailCard(this.detail,{ Key? key,
+  const ReviewDetailCard(
+    this.detail, {
+    Key? key,
   }) : super(key: key);
 
   // 根据conclusion获取卡片颜色
@@ -37,17 +40,36 @@ class ReviewDetailCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // 题号
-            Text(
-              '第${detail.no}题',
-              style:TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-                color: Colors.black87,
-              ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  '第${detail.no}题',
+                  style: TextStyle(
+                    fontSize: 18,
+                    color: Colors.black87,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                Row(
+                  children: [
+                    Icon(FluentIcons.thumb_like_20_regular),
+                    SizedBox(width: 8), // Add some space between the icons
+                    Icon(FluentIcons.thumb_dislike_20_regular),
+                  ],
+                ),
+              ],
             ),
+            // 题号
             Divider(height: 24),
 
+            _buildSection(
+              '题目:',
+              detail.question ?? '',
+              detail.conclusion != 1 ? Colors.grey : Colors.green,
+            ),
+            if (detail.options != null && detail.options!.isNotEmpty)
+              _buildSection('选项:', detail.options!),
             // 学生答案
             _buildSection(
               '你的答案:',
@@ -84,16 +106,20 @@ class ReviewDetailCard extends StatelessWidget {
         children: [
           Text(
             title,
-            style:TextStyle(  fontSize: 16,
+            style: TextStyle(
+              fontSize: 16,
               fontWeight: FontWeight.w600,
-              color: Colors.black87,),
+              color: Colors.black87,
+            ),
           ),
           SizedBox(height: 4),
           Text(
             content,
-            style: TextStyle(  fontSize: 15,
+            style: TextStyle(
+              fontSize: 15,
               color: contentColor ?? Colors.black87,
-              height: 1.5,),
+              height: 1.5,
+            ),
           ),
         ],
       ),
@@ -102,7 +128,10 @@ class ReviewDetailCard extends StatelessWidget {
 
   Widget _buildKnowledgeTags(String knowledge) {
     // 将知识点字符串分割成列表
-    final tags = knowledge.split(RegExp(r'[,\s]+')).where((tag) => tag.isNotEmpty).toList();
+    final tags = knowledge
+        .split(RegExp(r'[,\s]+'))
+        .where((tag) => tag.isNotEmpty)
+        .toList();
 
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 8),
@@ -111,7 +140,7 @@ class ReviewDetailCard extends StatelessWidget {
         children: [
           Text(
             '相关知识点:',
-            style:TextStyle(
+            style: TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.w600,
               color: Colors.black87,
@@ -140,7 +169,7 @@ class ReviewDetailCard extends StatelessWidget {
       ),
       child: Text(
         tag,
-        style:TextStyle(
+        style: TextStyle(
           fontSize: 14,
           color: Colors.blue.shade700,
         ),

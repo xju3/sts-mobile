@@ -11,14 +11,16 @@ import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 mixin LoginMixin<T extends StatefulWidget> {
-  Future<void> initPlatformState(
-      JPush _jpush, AccountApi _accountApi, String? _parent_id) async {
-    if (_parent_id == null) return;
+  Future<void> initPlatformState(JPush jpush, AccountApi accountApi,
+      String? parentId, BuildContext context) async {
+    if (parentId == null) return;
 
     try {
-      _jpush.addEventHandler(
+      jpush.addEventHandler(
           onReceiveNotification: (Map<String, dynamic> message) async {},
-          onOpenNotification: (Map<String, dynamic> message) async {},
+          onOpenNotification: (Map<String, dynamic> message) async {
+            Navigator.pushNamed(context, "/review"); // 使用Navigator导航到指定页面
+          },
           onReceiveMessage: (Map<String, dynamic> message) async {},
           onReceiveNotificationAuthorization:
               (Map<String, dynamic> message) async {},
@@ -31,25 +33,25 @@ mixin LoginMixin<T extends StatefulWidget> {
       //
     }
 
-    _jpush.setAuth(enable: true);
-    _jpush.setup(
+    jpush.setAuth(enable: true);
+    jpush.setup(
       appKey: "4f7cd06d248b876d0be2ff06", //你自己应用的 AppKey
       channel: "theChannel",
       production: false,
-      debug: true,
+      debug: false,
     );
-    _jpush.applyPushAuthority(
-        new NotificationSettingsIOS(sound: true, alert: true, badge: true));
+    jpush.applyPushAuthority(
+        NotificationSettingsIOS(sound: true, alert: true, badge: true));
 
     // Platform messages may fail, so we use a try/catch PlatformException.
-    _jpush.getRegistrationID().then((rid) {
+    jpush.getRegistrationID().then((rid) {
       var deviceId = 'ios';
       if (Platform.isAndroid) {
         deviceId = 'android';
       }
       var history = LoginHistory(
-          parentId: _parent_id, notificationId: rid, deviceId: deviceId);
-      _accountApi.createLoginHistory(history);
+          parentId: parentId, notificationId: rid, deviceId: deviceId);
+      accountApi.createLoginHistory(history);
     });
   }
 
@@ -66,6 +68,7 @@ mixin LoginMixin<T extends StatefulWidget> {
   void mxLogout(BuildContext context) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.remove('account');
+    if (!context.mounted) return;
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(builder: (context) => SplashPage()),
@@ -90,7 +93,8 @@ mixin LoginMixin<T extends StatefulWidget> {
 
     await prefs.setString('account', jsonString);
     await prefs.setString('studentId', studentId);
-    await initPlatformState(jpush, accountApi, accountInfo.parent?.id);
+    await initPlatformState(jpush, accountApi, accountInfo.parent?.id, context);
+    if (!context.mounted) return;
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(builder: (context) => ReviewPage()),

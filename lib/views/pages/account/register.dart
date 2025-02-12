@@ -8,10 +8,12 @@ import 'package:duowoo/views/mixins/login_minxin.dart';
 import 'package:duowoo/server/api/account_api.dart';
 import 'package:duowoo/server/model/registration.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:jpush_flutter/jpush_flutter.dart';
 import 'package:logger/logger.dart';
 import 'package:duowoo/views/pages/common/base.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({Key? key}) : super(key: key);
@@ -34,35 +36,11 @@ class _RegisterPageState extends BasePage<RegisterPage> with LoginMixin, Message
   }
 
   Future<void> _findSchools() async {
-    EasyLoading.show(status: "正在检查本设备是否开启位置服务");
     bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
-    // final hasPermission = await Permission.locationWhenInUse.serviceStatus.isEnabled;
     if (!serviceEnabled) {
-      return Future.error('Location services are disabled.');
+      Fluttertoast.showToast(msg: "没开启位置服务");
+      return;
     }
-
-    LocationPermission permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.denied) {
-      try {
-        permission = await Geolocator.requestPermission();
-        if (permission == LocationPermission.denied) {
-          // Permissions are denied, next time you could try
-          // requesting the permission again (this is also where
-          // Android's shouldShowRequestPermissionRationale returned true.
-          return Future.error(
-              'Location permissions are denied, we cannot request permissions.');
-        }
-      } catch (e) {
-        return Future.error(e);
-      }
-    }
-
-    if (permission == LocationPermission.deniedForever) {
-      // Permissions are denied forever, handle appropriately.
-      return Future.error(
-          'Location permissions are permanently denied, we cannot request permissions.');
-    }
-    // When we reach here, permissions are granted and we can
     // continue accessing the position of the device.
     EasyLoading.show(status: "正在获取你当前位置，以查找周边的学校");
     final position = await Geolocator.getLastKnownPosition();
