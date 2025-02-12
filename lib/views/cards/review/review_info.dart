@@ -53,16 +53,13 @@ class ReviewCard extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                GestureDetector(
-                  onTap: showOriginImages(review.requestId),
-                  child: Text(
+                  Text(
                     review.subject ?? "",
                     style: TextStyle(
                       fontSize: 20,
                       color: Colors.black26,
                       fontWeight: FontWeight.bold,
                     ),
-                  ),
                 ),
                 Row(
                   children: [
