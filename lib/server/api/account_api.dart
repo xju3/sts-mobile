@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:duowoo/server/model/account.dart';
+import 'package:duowoo/server/model/login_history.dart';
 import 'package:duowoo/server/model/school.dart';
 import 'package:retrofit/retrofit.dart';
 import 'package:duowoo/server/model/registration.dart';
@@ -18,6 +19,9 @@ abstract class AccountApi extends BaseApi {
 
   @POST("/account/login")
   Future<AccountInfo> login(@Body() Login login);
+
+  @POST("/account/login/history")
+  Future<void> createLoginHistory(@Body() LoginHistory history);
 
   @POST("/account/create")
   Future<AccountInfo> create(@Body() Registration registration);

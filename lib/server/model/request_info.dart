@@ -9,9 +9,10 @@ class RequestInfo {
   final String? studentId;
   @JsonKey(name: 'transTime')
   final DateTime? transTime;
+  final int? images;
   final String? status;
 
-  RequestInfo({this.id, this.studentId, this.transTime, this.status});
+  RequestInfo({this.id, this.studentId, this.transTime, this.images, this.status});
 
   factory RequestInfo.fromJson(Map<String, dynamic> json) =>
       _$RequestInfoFromJson(json);

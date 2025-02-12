@@ -1,26 +1,21 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'request_info.dart';
+part of 'review_request.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-RequestInfo _$RequestInfoFromJson(Map<String, dynamic> json) => RequestInfo(
+ReviewRequest _$ReviewRequestFromJson(Map<String, dynamic> json) =>
+    ReviewRequest(
       id: json['id'] as String?,
       studentId: json['studentId'] as String?,
-      transTime: json['transTime'] == null
-          ? null
-          : DateTime.parse(json['transTime'] as String),
       images: (json['images'] as num?)?.toInt(),
-      status: json['status'] as String?,
     );
 
-Map<String, dynamic> _$RequestInfoToJson(RequestInfo instance) =>
+Map<String, dynamic> _$ReviewRequestToJson(ReviewRequest instance) =>
     <String, dynamic>{
       'id': instance.id,
       'studentId': instance.studentId,
-      'transTime': instance.transTime?.toIso8601String(),
       'images': instance.images,
-      'status': instance.status,
     };

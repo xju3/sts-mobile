@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:app_settings/app_settings.dart';
+
 import 'package:duowoo/views/pages/account/splash.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:jpush_flutter/jpush_flutter.dart';
 
 class MyApp extends StatefulWidget {
   const MyApp({super.key});
@@ -14,7 +15,6 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
-    // AppSettings.openAppSettings();
   }
 
   @override

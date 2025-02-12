@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 
 mixin MessageMixin<T extends StatefulWidget> {
-  static String qrMessage = "qr_message";
-  static String errMessage = "qr_message";
+  static String errNetwork= "err_network";
+  static String errApi= "err_api";
 
   void mxShowSnackbar(
       String message, ContentType contentType, BuildContext context) {

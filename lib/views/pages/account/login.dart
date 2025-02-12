@@ -1,13 +1,13 @@
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
-import 'package:dio/dio.dart';
 import 'package:duowoo/server/model/login.dart';
 import 'package:duowoo/views/forms/login.dart';
-import 'package:duowoo/views/mixins/common_mixin.dart';
 import 'package:duowoo/views/mixins/login_minxin.dart';
 import 'package:duowoo/server/api/account_api.dart';
 import 'package:duowoo/views/mixins/message_mixin.dart';
 import 'package:flutter/material.dart';
 import 'package:duowoo/views/pages/account/register.dart';
+import 'package:jpush_flutter/jpush_flutter.dart';
+import 'package:duowoo/views/pages/common/base.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -16,8 +16,9 @@ class LoginPage extends StatefulWidget {
   State<LoginPage> createState() => _LoginPageState();
 }
 
-class _LoginPageState extends State<LoginPage> with LoginMixin, MessageMixin {
+class _LoginPageState extends BasePage<LoginPage> with LoginMixin, MessageMixin {
   final _formKey = GlobalKey<FormState>();
+  final JPush jPush = JPush();
   final _accountApi = AccountApi();
   final _login = Login();
 
@@ -36,7 +37,8 @@ class _LoginPageState extends State<LoginPage> with LoginMixin, MessageMixin {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
       _accountApi.login(_login).then((accountInfo) async {
-        mxLoginHandler(_accountApi, accountInfo, context, onAccountNotFound);
+        mxLoginHandler(
+            jPush, _accountApi, accountInfo, context, onAccountNotFound);
       });
     }
   }

@@ -7,9 +7,9 @@ part of 'account.dart';
 // **************************************************************************
 
 AccountInfo _$AccountInfoFromJson(Map<String, dynamic> json) => AccountInfo(
-      id: json['id'] as String?,
-      parentId: json['parentId'] as String?,
-      parentName: json['parentName'] as String?,
+      parent: json['parent'] == null
+          ? null
+          : Parent.fromJson(json['parent'] as Map<String, dynamic>),
       students: (json['students'] as List<dynamic>?)
           ?.map((e) => Student.fromJson(e as Map<String, dynamic>))
           .toList(),
@@ -17,8 +17,6 @@ AccountInfo _$AccountInfoFromJson(Map<String, dynamic> json) => AccountInfo(
 
 Map<String, dynamic> _$AccountInfoToJson(AccountInfo instance) =>
     <String, dynamic>{
-      'id': instance.id,
-      'parentId': instance.parentId,
-      'parentName': instance.parentName,
+      'parent': instance.parent,
       'students': instance.students,
     };

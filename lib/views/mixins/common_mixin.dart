@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import '../../server/model/option.dart';
 
 mixin StringMixin<T extends StatefulWidget> {

@@ -5,19 +5,19 @@ part 'registration.g.dart';
 @JsonSerializable()
 class Registration {
   String? parent;
-  String? mobile;
+  String? account;
   String? student;
   String? grade;
   String? schoolId;
-  String? school;
+  String? schoolName;
 
   Registration({
-    this.schoolId,
-    this.school,
     this.parent,
-    this.mobile,
+    this.account,
     this.student,
     this.grade,
+    this.schoolId,
+    this.schoolName,
   });
 
   factory Registration.fromJson(Map<String, dynamic> json) =>

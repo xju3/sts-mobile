@@ -1,8 +1,10 @@
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:duowoo/views/mixins/common_mixin.dart';
 import 'package:duowoo/views/mixins/message_mixin.dart';
+import 'package:duowoo/views/pages/review/assignment_images.dart';
 import 'package:duowoo/views/pages/review/detail.dart';
 import 'package:duowoo/views/widgets/app_bar.dart';
+import 'package:duowoo/views/pages/common/base.dart';
 import 'package:duowoo/views/widgets/menu_draw.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
@@ -10,7 +12,7 @@ import 'package:logger/logger.dart';
 import 'package:wechat_camera_picker/wechat_camera_picker.dart';
 import 'package:wechat_assets_picker/wechat_assets_picker.dart';
 import 'package:duowoo/views/mixins/image_picker_mixin.dart';
-import 'package:duowoo/views/mixins/home_mixin.dart';
+import 'package:duowoo/views/mixins/review_mixin.dart';
 import 'package:duowoo/server/api/review_api.dart';
 import 'package:duowoo/views/cards/review/review_info.dart';
 import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
@@ -24,8 +26,8 @@ class ReviewPage extends StatefulWidget {
   State<ReviewPage> createState() => _ReviewPageState();
 }
 
-class _ReviewPageState extends State<ReviewPage>
-    with ImagePickerMixin, HomeMixin, StringMixin, MessageMixin {
+class _ReviewPageState extends BasePage<ReviewPage>
+    with ImagePickerMixin, ReviewMixin, StringMixin, MessageMixin {
   var logger = Logger(printer: PrettyPrinter());
   final reviewApi = ReviewApi();
 
@@ -46,6 +48,20 @@ class _ReviewPageState extends State<ReviewPage>
     _refreshController.refreshCompleted();
   }
 
+  Future _showOriginImages(String? requestId) async {
+    if (requestId == null) return;
+    var images = await reviewApi.getReviewImages(requestId);
+    if (images.isEmpty) return;
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (context) => AssignmentImagesPage(
+                imageUrls: images,
+                initialIndex: 0,
+              )),
+    );
+  }
+
   void _onLoading() async {
     await Future.delayed(Duration(milliseconds: 1000));
     if (mounted) setState(() {});
@@ -64,8 +80,8 @@ class _ReviewPageState extends State<ReviewPage>
   }
 
   void showSnackbar() {
-    mxShowSnackbar(
-        "AI正在批改本次作业，此过程大约需要1～2分钟，任务完成后，您会收到系统通知.", ContentType.success, context);
+    mxShowSnackbar("AI正在批改本次作业，此过程大约需要1～2分钟，任务完成后，您会收到系统通知.",
+        ContentType.success, context);
   }
 
   void selectImages() async {
@@ -114,10 +130,12 @@ class _ReviewPageState extends State<ReviewPage>
         onRefresh: _onRefresh,
         onLoading: _onLoading,
         child: ListView(
-          children:
-              reviews.map((e) => ReviewCard(e, showReviewDetail)).toList(),
+          children: reviews
+              .map((e) => ReviewCard(e, showReviewDetail, _showOriginImages))
+              .toList(),
         ),
       ),
     );
   }
+
 }

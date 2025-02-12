@@ -3,6 +3,7 @@ import 'package:duowoo/views/cards/review/detail_card.dart';
 import 'package:flutter/material.dart';
 import 'package:duowoo/views/widgets/app_bar.dart';
 import 'package:duowoo/views/widgets/menu_draw.dart';
+import 'package:duowoo/views/pages/common/base.dart';
 
 class ReviewDetailPage extends StatefulWidget {
   final String date;
@@ -16,7 +17,7 @@ class ReviewDetailPage extends StatefulWidget {
   State<ReviewDetailPage> createState() => _ReviewDetailPageState();
 }
 
-class _ReviewDetailPageState extends State<ReviewDetailPage> {
+class _ReviewDetailPageState extends BasePage<ReviewDetailPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(

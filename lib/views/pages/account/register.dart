@@ -9,7 +9,9 @@ import 'package:duowoo/server/api/account_api.dart';
 import 'package:duowoo/server/model/registration.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:jpush_flutter/jpush_flutter.dart';
 import 'package:logger/logger.dart';
+import 'package:duowoo/views/pages/common/base.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({Key? key}) : super(key: key);
@@ -18,15 +20,16 @@ class RegisterPage extends StatefulWidget {
   State<RegisterPage> createState() => _RegisterPageState();
 }
 
-class _RegisterPageState extends State<RegisterPage> with LoginMixin, MessageMixin {
+class _RegisterPageState extends BasePage<RegisterPage> with LoginMixin, MessageMixin {
   final _formKey = GlobalKey<FormState>();
   final _accountApi = AccountApi();
+  final JPush jPush = JPush();
   final logger = Logger(printer: PrettyPrinter());
   List<School> schools = [];
 
   void _submit(Registration registration)  async{
     _accountApi.create(registration).then((accountInfo)  {
-      mxLoginHandler(_accountApi, accountInfo, context, null);
+      mxLoginHandler(jPush, _accountApi, accountInfo, context, null);
     });
   }
 
@@ -62,17 +65,24 @@ class _RegisterPageState extends State<RegisterPage> with LoginMixin, MessageMix
     // When we reach here, permissions are granted and we can
     // continue accessing the position of the device.
     EasyLoading.show(status: "正在获取你当前位置，以查找周边的学校");
-    final position = await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.high);
+    final position = await Geolocator.getLastKnownPosition();
     EasyLoading.show(status: "正在准备学校数据.");
-    var data = await _accountApi.getSchools(position.latitude, position.longitude);
-    setState(() {
-      logger.d("schools : ${data.length}");
-      schools = data;
-    });
+    if (null == position) {
+      //获取当前位置失败.
+    }
+    var latitude = position?.latitude?? 0.0;
+    var longitude= position?.longitude?? 0.0;
 
-    if (data.isEmpty) {
-      mxShowSnackbar("周边没有找学校，建议你到学校近的地方居住，方便孩子上学", ContentType.failure, context);
+    if (latitude > 0 || longitude > 0) {
+      var data = await _accountApi.getSchools(latitude, longitude);
+      if (data.isEmpty) {
+        mxShowSnackbar("周边没有找学校，建议你到学校近的地方居住，方便孩子上学", ContentType.failure, context);
+      } else {
+        setState(() {
+          logger.d("schools : ${data.length}");
+          schools = data;
+        });
+      }
     }
     EasyLoading.dismiss();
 

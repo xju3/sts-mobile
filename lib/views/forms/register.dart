@@ -45,8 +45,8 @@ class _RegisterFormState extends State<RegisterForm> with TextStyleMixin {
   void onSchoolSelected(School school) {
     setState(() {
       registration.schoolId = school.id;
-      registration.school = school.fullName;
-      _schoolController.text = registration.school ?? "";
+      registration.schoolName = school.fullName;
+      _schoolController.text = registration.schoolName ?? "";
     });
   }
 
@@ -102,7 +102,7 @@ class _RegisterFormState extends State<RegisterForm> with TextStyleMixin {
               ),
             ),
             validator: (value) => _validateField(value, "学校名称"),
-            onSaved: (value) => registration.school = value,
+            onSaved: (value) => registration.schoolName = value,
           ),
           TextFormField(
             decoration: InputDecoration(
@@ -122,7 +122,7 @@ class _RegisterFormState extends State<RegisterForm> with TextStyleMixin {
                 labelText: 'Account Name', labelStyle: registerFormTextStyle()),
             keyboardType: TextInputType.emailAddress,
             validator: (value) => _validateField(value, "登录账户"),
-            onSaved: (value) => registration.mobile = value,
+            onSaved: (value) => registration.account = value,
           ),
           TextFormField(
             decoration: InputDecoration(

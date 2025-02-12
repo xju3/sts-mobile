@@ -11,7 +11,7 @@ final uuid = const Uuid();
 final reviewApi = ReviewApi();
 final logger = Logger(printer: PrettyPrinter());
 
-mixin HomeMixin<T extends StatefulWidget> {
+mixin ReviewMixin<T extends StatefulWidget> {
   //
   Future<void> mxUploadAssignments(
       List<AssetEntity> assets,
@@ -36,7 +36,7 @@ mixin HomeMixin<T extends StatefulWidget> {
       if (index == count) {
         EasyLoading.show(status: "作业上传完成,正在向AI发送批改请求.");
         logger.i("create review request: $requestId of $studentId");
-        await reviewApi.createReview(studentId, requestId);
+        await reviewApi.createReview(studentId, requestId, count);
         EasyLoading.dismiss();
         popupMessage();
         index++;

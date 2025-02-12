@@ -33,7 +33,7 @@ class AppInterceptors extends Interceptor with MessageMixin {
   @override
   void onError(DioException err, ErrorInterceptorHandler handler) async {
     logger.e(err.message);
-    FBroadcast.instance().broadcast(MessageMixin.errMessage, value: '网络请求失败.');
+    FBroadcast.instance().broadcast(MessageMixin.errNetwork, value: '网络请求失败.');
     // handler.next(err);
     if (err.response?.statusCode == 401) {
       remoteToken();
@@ -51,7 +51,7 @@ class AppInterceptors extends Interceptor with MessageMixin {
     var result = Result.fromJson(map);
     var err = result.err;
     if (err == null || err.code == null || err.code != '0') {
-      FBroadcast.instance().broadcast(MessageMixin.errMessage, value: "");
+      FBroadcast.instance().broadcast(MessageMixin.errApi, value: err?.msg ??"");
       return;
     }
     response.data = result.data;

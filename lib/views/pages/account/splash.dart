@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:dio/dio.dart';
+import 'package:duowoo/views/mixins/login_minxin.dart';
 import 'package:duowoo/views/pages/home.dart';
 import 'package:duowoo/views/pages/review/review.dart';
 
@@ -16,7 +17,7 @@ class SplashPage extends StatefulWidget {
   State<SplashPage> createState() => _SplashPageState();
 }
 
-class _SplashPageState extends State<SplashPage> {
+class _SplashPageState extends State<SplashPage> with LoginMixin {
   bool _isLoggedIn = true;
   final dio = Dio();
   final log = Logger(printer: PrettyPrinter());
@@ -49,10 +50,8 @@ class _SplashPageState extends State<SplashPage> {
         _counter--;
         if (_counter == 0) {
           timer.cancel();
-          SharedPreferences prefs = await SharedPreferences.getInstance();
-          var studentId = prefs.getString('studentId');
-          var studentName = prefs.getString('studentName') ?? "";
-          if (studentId == null) {
+          var account = await getAccountInfo();
+          if (account == null) {
             _isLoggedIn = false;
           }
           if (!_isLoggedIn) {
@@ -63,13 +62,13 @@ class _SplashPageState extends State<SplashPage> {
               log.d('发生了错误: $e');
             }
           }
-          _navigateToPage(_isLoggedIn, studentName);
+          _navigateToPage(_isLoggedIn);
         }
         setState(() { });
     });
   }
 
-  void _navigateToPage(isLoggedIn, studentName) {
+  void _navigateToPage(isLoggedIn) {
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(

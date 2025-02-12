@@ -12,22 +12,25 @@ final Map<String, Color> subjectColors = {
 class ReviewCard extends StatelessWidget {
   final ReviewAi review;
   final Function(ReviewAi, int, int) showReviewDetails;
+  final Function(String?) showOriginImages;
 
   const ReviewCard(
     this.review,
-    this.showReviewDetails, {
+    this.showReviewDetails,
+    this.showOriginImages, {
     Key? key,
   }) : super(key: key);
 
-
-  void onCorrectButtonTapped(){
+  void onCorrectButtonTapped() {
     showReviewDetails(review, 1, review.correct ?? 0);
   }
-  void onInCorrectButtonTapped(){
+
+  void onInCorrectButtonTapped() {
     showReviewDetails(review, -1, review.incorrect ?? 0);
   }
-  void onUncertainButtonTapped(){
-    showReviewDetails(review, 0, review.uncertain?? 0);
+
+  void onUncertainButtonTapped() {
+    showReviewDetails(review, 0, review.uncertain ?? 0);
   }
 
   @override
@@ -50,21 +53,27 @@ class ReviewCard extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  review.subject ?? "",
-                  style: TextStyle(
-                    fontSize: 20,
-                    color: Colors.black26,
-                    fontWeight: FontWeight.bold,
+                GestureDetector(
+                  onTap: showOriginImages(review.requestId),
+                  child: Text(
+                    review.subject ?? "",
+                    style: TextStyle(
+                      fontSize: 20,
+                      color: Colors.black26,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
                 Row(
                   children: [
-                    _buildStatChip('正确', review.correct ?? 0, Colors.green, onCorrectButtonTapped),
+                    _buildStatChip('正确', review.correct ?? 0, Colors.green,
+                        onCorrectButtonTapped),
                     SizedBox(width: 8),
-                    _buildStatChip('未答', review.uncertain ?? 0, Colors.grey, onUncertainButtonTapped),
+                    _buildStatChip('未答', review.uncertain ?? 0, Colors.grey,
+                        onUncertainButtonTapped),
                     SizedBox(width: 8),
-                    _buildStatChip('错误', review.incorrect ?? 0, Colors.red, onInCorrectButtonTapped),
+                    _buildStatChip('错误', review.incorrect ?? 0, Colors.red,
+                        onInCorrectButtonTapped),
                   ],
                 ),
               ],
@@ -93,7 +102,8 @@ class ReviewCard extends StatelessWidget {
     );
   }
 
-  Widget _buildStatChip(String label, int value, Color color, VoidCallback? onTap) {
+  Widget _buildStatChip(
+      String label, int value, Color color, VoidCallback? onTap) {
     return Material(
       color: Colors.transparent,
       child: InkWell(
