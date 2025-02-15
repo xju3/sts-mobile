@@ -66,9 +66,16 @@ dependencies:
   device_info_plus: ^11.3.0
   photo_view: ^0.15.0
   jpush_flutter:
-    git:
-      url: git://github.com/jpush/jpush-flutter-plugin.git
-      ref: dev-3.x
+    path: ./plugins/jpush-flutter-plugin
+  empty_widget_pro: ^0.0.5
+  webview_flutter: ^4.10.0
+  upgrader: ^11.3.1
+  another_flushbar: ^1.12.30
+  confirm_dialog: ^1.0.4
+  android_intent_plus: ^5.3.0
+  ionicons: ^0.2.2
+  loader_overlay: ^5.0.0
+  # r_upgrade: ^0.4.2
 
 dev_dependencies:
   flutter_test:

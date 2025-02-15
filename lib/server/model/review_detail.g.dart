@@ -18,6 +18,7 @@ ReviewDetail _$ReviewDetailFromJson(Map<String, dynamic> json) => ReviewDetail(
       reason: json['reason'] as String?,
       solution: json['solution'] as String?,
       knowledge: json['knowledge'] as String?,
+      err: (json['err'] as num?)?.toInt(),
       suggestion: json['suggestion'] as String?,
     );
 
@@ -35,4 +36,5 @@ Map<String, dynamic> _$ReviewDetailToJson(ReviewDetail instance) =>
       'solution': instance.solution,
       'knowledge': instance.knowledge,
       'suggestion': instance.suggestion,
+      'err': instance.err,
     };

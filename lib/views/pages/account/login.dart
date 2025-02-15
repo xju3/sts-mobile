@@ -16,7 +16,8 @@ class LoginPage extends StatefulWidget {
   State<LoginPage> createState() => _LoginPageState();
 }
 
-class _LoginPageState extends BasePage<LoginPage> with LoginMixin, MessageMixin {
+class _LoginPageState extends BasePage<LoginPage>
+    with LoginMixin, MessageMixin {
   final _formKey = GlobalKey<FormState>();
   final JPush jPush = JPush();
   final _accountApi = AccountApi();
@@ -37,7 +38,7 @@ class _LoginPageState extends BasePage<LoginPage> with LoginMixin, MessageMixin 
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
       _accountApi.login(_login).then((accountInfo) async {
-        mxLoginHandler(
+        loginHandler(
             jPush, _accountApi, accountInfo, context, onAccountNotFound);
       });
     }

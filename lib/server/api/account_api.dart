@@ -1,6 +1,8 @@
 import 'package:dio/dio.dart';
 import 'package:duowoo/server/model/account.dart';
 import 'package:duowoo/server/model/login_history.dart';
+import 'package:duowoo/server/model/parent.dart';
+import 'package:duowoo/server/model/student.dart';
 import 'package:duowoo/server/model/school.dart';
 import 'package:retrofit/retrofit.dart';
 import 'package:duowoo/server/model/registration.dart';
@@ -20,12 +22,20 @@ abstract class AccountApi extends BaseApi {
   @POST("/account/login")
   Future<AccountInfo> login(@Body() Login login);
 
+  @POST("/account/registration")
+  Future<AccountInfo> registration(@Body() Registration registration);
+
   @POST("/account/login/history")
   Future<void> createLoginHistory(@Body() LoginHistory history);
 
-  @POST("/account/create")
-  Future<AccountInfo> create(@Body() Registration registration);
-
   @PUT("/account/schools/{lat}/{lng}")
   Future<List<School>> getSchools(@Path() double lat, @Path() double lng);
+
+  @POST("/account/parent/{accountId}")
+  Future<AccountInfo> addParent(
+      @Path() String accountId, @Body() Parent parent);
+
+  @POST("/account/student/{accountId}")
+  Future<AccountInfo> addStudent(
+      @Path() String accountId, @Body() Student student);
 }

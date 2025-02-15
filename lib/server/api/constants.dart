@@ -5,8 +5,8 @@ class AppConstants {
   static const String kEmployee = 'employee';
   static const String kRoleIds = 'roleIds';
   static const String kAuthorization = 'Authorization';
-  static const String kVersion = '2024.11.12.017';
-  // static const String kBaseUrl = 'http://192.168.0.123:3300';
+  static const String kVersion = '2025.02.13.001';
+  static const String kAndroidUpgradeUrl = 'http://app.aeons.me';
   static const String kBaseUrl = 'http://192.168.1.3:3300';
   // static const String kBaseUrl = 'http://api.aeons.me';
   static const String kWsUrl = 'ws://192.168.1.3:3300';

@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:duowoo/server/model/school.dart';
 import 'package:duowoo/views/mixins/text_style_mixin.dart';
 import 'package:flutter/material.dart';
@@ -9,26 +7,23 @@ import 'package:select_dialog/select_dialog.dart';
 
 class RegisterForm extends StatefulWidget {
   final GlobalKey<FormState> formKey;
-  final Function(Registration) onSubmit;
-  final Function findSchools;
+  final Registration registration;
   final List<School> schools;
 
   const RegisterForm(
     this.formKey,
-    this.onSubmit,
-    this.schools,
-    this.findSchools, {
-    Key? key,
-  }) : super(key: key);
+    this.registration,
+    this.schools, {
+    super.key,
+  });
 
   @override
   State<RegisterForm> createState() => _RegisterFormState();
 }
 
 class _RegisterFormState extends State<RegisterForm> with TextStyleMixin {
-  School? selectedSchool = null;
+  School? selectedSchool;
   final _schoolController = TextEditingController();
-  Registration registration = Registration();
   final logger = Logger(printer: PrettyPrinter());
 
   String? _validateField(String? value, String fieldName) {
@@ -44,26 +39,14 @@ class _RegisterFormState extends State<RegisterForm> with TextStyleMixin {
 
   void onSchoolSelected(School school) {
     setState(() {
-      registration.schoolId = school.id;
-      registration.schoolName = school.fullName;
-      _schoolController.text = registration.schoolName ?? "";
+      widget.registration.schoolId = school.id;
+      widget.registration.schoolName = school.fullName;
+      _schoolController.text = widget.registration.schoolName ?? "";
     });
-  }
-
-  void register() {
-    if (widget.formKey.currentState!.validate()) {
-      widget.formKey.currentState!.save();
-      widget.onSubmit(registration);
-    }
   }
 
   void selectSchool(List<School> schools) async {
     logger.d("schools: ${schools.length}");
-    if (widget.schools.isEmpty) {
-      widget.findSchools();
-      return;
-    }
-
     SelectDialog.showModal<School>(
       context,
       label: '请选择附近的学校',
@@ -75,7 +58,7 @@ class _RegisterFormState extends State<RegisterForm> with TextStyleMixin {
             color: Colors.deepOrange,
           ),
           selected: isSelected,
-          title: Text(option.fullName ?? "999"),
+          title: Text(option.fullName ?? ""),
         );
       },
       onChange: onSchoolSelected,
@@ -90,11 +73,27 @@ class _RegisterFormState extends State<RegisterForm> with TextStyleMixin {
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           TextFormField(
-            controller: _schoolController,
-            readOnly: true,
+            textInputAction: TextInputAction.next,
+            decoration: InputDecoration(
+                labelText: '登录账号', labelStyle: registerFormTextStyle()),
+            keyboardType: TextInputType.emailAddress,
+            validator: (value) => _validateField(value, "登录账户"),
+            onSaved: (value) => widget.registration.account = value,
+          ),
+          TextFormField(
             textInputAction: TextInputAction.done,
             decoration: InputDecoration(
-              labelText: 'School Name',
+                labelText: '您的称呼', labelStyle: registerFormTextStyle()),
+            keyboardType: TextInputType.text,
+            validator: (value) => _validateField(value, "您的称呼"),
+            onSaved: (value) => widget.registration.parent = value,
+          ),
+          TextFormField(
+            controller: _schoolController,
+            readOnly: true,
+            textInputAction: TextInputAction.next,
+            decoration: InputDecoration(
+              labelText: '学校名称',
               labelStyle: registerFormTextStyle(),
               suffixIcon: IconButton(
                 onPressed: () => selectSchool(widget.schools),
@@ -102,38 +101,22 @@ class _RegisterFormState extends State<RegisterForm> with TextStyleMixin {
               ),
             ),
             validator: (value) => _validateField(value, "学校名称"),
-            onSaved: (value) => registration.schoolName = value,
+            onSaved: (value) => widget.registration.schoolName = value,
           ),
           TextFormField(
+            textInputAction: TextInputAction.next,
             decoration: InputDecoration(
-                labelText: 'Student Name', labelStyle: registerFormTextStyle()),
+                labelText: '学生称呼', labelStyle: registerFormTextStyle()),
             validator: (value) => _validateField(value, "学生姓名"),
-            onSaved: (value) => registration.student = value,
+            onSaved: (value) => widget.registration.student = value,
           ),
           TextFormField(
             keyboardType: TextInputType.number,
+            textInputAction: TextInputAction.next,
             decoration: InputDecoration(
-                labelText: 'Grade', labelStyle: registerFormTextStyle()),
+                labelText: '年级', labelStyle: registerFormTextStyle()),
             validator: (value) => _validateField(value, "年级"),
-            onSaved: (value) => registration.grade = value,
-          ),
-          TextFormField(
-            decoration: InputDecoration(
-                labelText: 'Account Name', labelStyle: registerFormTextStyle()),
-            keyboardType: TextInputType.emailAddress,
-            validator: (value) => _validateField(value, "登录账户"),
-            onSaved: (value) => registration.account = value,
-          ),
-          TextFormField(
-            decoration: InputDecoration(
-                labelText: 'Your Name', labelStyle: registerFormTextStyle()),
-            keyboardType: TextInputType.text,
-            validator: (value) => _validateField(value, "您的称呼"),
-            onSaved: (value) => registration.parent = value,
-          ),
-          ElevatedButton(
-            onPressed: register,
-            child: const Text('Submit'),
+            onSaved: (value) => widget.registration.grade = value,
           ),
         ],
       ),

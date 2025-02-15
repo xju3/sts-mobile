@@ -4,27 +4,30 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
   final List<Widget> actions;
   final bool showDrawer;
-  const CustomAppBar(this.title, this.actions, this.showDrawer, {Key? key}) : super(key: key);
+  const CustomAppBar(this.title, this.actions, this.showDrawer, {Key? key})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+        backgroundColor: Color(0XFFDFD3C3),
         title: Text(title),
-        leading: this.showDrawer ? Builder(
-          // 使用 Builder 来获取 BuildContext
-          builder: (BuildContext context) {
-            return IconButton(
-              icon: const Icon(
-                Icons.menu,
-                color: Colors.teal,
-              ),
-              onPressed: () {
-                Scaffold.of(context).openDrawer();
-              },
-            );
-          },
-        ) : Text(""),
+        leading: showDrawer
+            ? Builder(
+                // 使用 Builder 来获取 BuildContext
+                builder: (BuildContext context) {
+                  return IconButton(
+                    icon: const Icon(
+                      Icons.menu,
+                      color: Colors.teal,
+                    ),
+                    onPressed: () {
+                      Scaffold.of(context).openDrawer();
+                    },
+                  );
+                },
+              )
+            : Text(""),
         titleTextStyle: TextStyle(
             fontFamily: "",
             color: Colors.teal,

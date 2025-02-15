@@ -36,6 +36,12 @@ android {
         ]
     }
 
+    // dependencies {
+    //     implementation 'cn.jpush:jpush-android:4.8.0' // 使用最新版本
+    //     // 如果需要支持自定义消息等功能，可以添加以下依赖
+    //     implementation 'cn.jpush:jpush-core:4.8.0'
+    // }
+
     buildTypes {
         release {
             manifestPlaceholders = [applicationName: "android.app.Application"]

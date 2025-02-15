@@ -4,18 +4,19 @@ part 'review_detail.g.dart';
 
 @JsonSerializable()
 class ReviewDetail {
-  final String? id;
-  final String? aiReviewId;
-  final String? no;
-  final String? ansStudent;
-  final String? question;
-  final String? options;
-  final String? ansAi;
-  final int? conclusion;
-  final String? reason;
-  final String? solution;
-  final String? knowledge;
-  final String? suggestion;
+   String? id;
+   String? aiReviewId;
+   String? no;
+   String? ansStudent;
+   String? question;
+   String? options;
+   String? ansAi;
+   int? conclusion;
+   String? reason;
+   String? solution;
+   String? knowledge;
+   String? suggestion;
+   int? err;
 
   ReviewDetail(
       {this.id,
@@ -29,6 +30,7 @@ class ReviewDetail {
       this.reason,
       this.solution,
       this.knowledge,
+        this.err,
       this.suggestion});
 
   factory ReviewDetail.fromJson(Map<String, dynamic> json) =>

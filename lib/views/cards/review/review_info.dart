@@ -2,22 +2,26 @@ import 'package:flutter/material.dart';
 import 'package:duowoo/server/model/review_ai.dart';
 
 final Map<String, Color> subjectColors = {
-  '语文': Color(0xFFF0F0F0),
-  '数学': Color(0xFFFFF9C4),
-  '英语': Color(0xFFE3F2FD),
-  '科学': Color(0xFFF1F8E9),
+  '语文': Color(0xFFA3D1C6),
+  '数学': Color(0xFFDDDDDD),
+  '英语': Color(0xFFE4E4D0),
+  '物理': Color(0xFFEADBC8),
+  '化学': Color(0xFFD0DDD0),
+  '历史': Color(0xFFF5F5F5),
+  '政治': Color(0xFFF2ECBE),
+  '生物': Color(0xFFFFE4C9),
   '其他': Color(0xFFFFF3E0)
 };
 
 class ReviewCard extends StatelessWidget {
   final ReviewAi review;
   final Function(ReviewAi, int, int) showReviewDetails;
-  final Function(String?) showOriginImages;
+  final Function(String?) showImages;
 
   const ReviewCard(
     this.review,
     this.showReviewDetails,
-    this.showOriginImages, {
+    this.showImages, {
     Key? key,
   }) : super(key: key);
 
@@ -53,13 +57,16 @@ class ReviewCard extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                  Text(
+                GestureDetector(
+                  onTap: () => showImages(review.requestId),
+                  child: Text(
                     review.subject ?? "",
                     style: TextStyle(
                       fontSize: 20,
                       color: Colors.black26,
                       fontWeight: FontWeight.bold,
                     ),
+                  ),
                 ),
                 Row(
                   children: [

@@ -48,9 +48,9 @@ mixin ReviewMixin<T extends StatefulWidget> {
     // EasyLoading.dismiss();
   }
 
-  Future<List<ReviewAi>> mxGetReviewList() async {
+  Future<List<ReviewAi>> mxGetReviewList(String date) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? studentId = prefs.getString('studentId');
-    return reviewApi.getReviewList(studentId!);
+    return reviewApi.getReviewList(studentId!, date);
   }
 }

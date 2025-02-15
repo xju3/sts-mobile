@@ -1,4 +1,5 @@
 import 'package:duowoo/views/mixins/common_mixin.dart';
+import 'package:duowoo/views/pages/common/base.dart';
 import 'package:duowoo/views/widgets/app_bar.dart';
 import 'package:duowoo/views/widgets/menu_draw.dart';
 import 'package:flutter/material.dart';
@@ -12,12 +13,12 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage>
+class _HomePageState extends BasePage<HomePage>
     with ImagePickerMixin, ReviewMixin, StringMixin {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: CustomAppBar("首页", [], true),
+        appBar:CustomAppBar("首页", [], true),
         drawer: CustomDraw(),
         body: Text("hello."));
   }

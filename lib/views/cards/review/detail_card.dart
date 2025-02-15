@@ -1,12 +1,14 @@
+import 'package:duowoo/views/mixins/review_mixin.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:duowoo/server/model/review_detail.dart';
 
 class ReviewDetailCard extends StatelessWidget {
   final ReviewDetail detail;
+  final Function(ReviewDetail) report;
 
   const ReviewDetailCard(
-    this.detail, {
+    this.detail, this.report,{
     Key? key,
   }) : super(key: key);
 
@@ -24,10 +26,16 @@ class ReviewDetailCard extends StatelessWidget {
     }
   }
 
+  void findErr(ReviewDetail detail) async {
+    if (detail.err == 1) return;
+    reviewApi.setAiReviewErr(detail.id!).then((onValue) {
+      detail.err = 1;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final isCorrect = detail.conclusion == 1;
-
     return Card(
       elevation: 4,
       margin: EdgeInsets.all(12),
@@ -51,13 +59,20 @@ class ReviewDetailCard extends StatelessWidget {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                Row(
-                  children: [
-                    Icon(FluentIcons.thumb_like_20_regular),
-                    SizedBox(width: 8), // Add some space between the icons
-                    Icon(FluentIcons.thumb_dislike_20_regular),
-                  ],
-                ),
+                if (!isCorrect)
+                  GestureDetector(
+                    onTap: () => report(detail),
+                    child: Row(
+                      children: [
+                        detail.err == 1
+                            ? Icon(
+                                FluentIcons.heart_broken_24_filled,
+                                color: Colors.red,
+                              )
+                            : Icon(FluentIcons.heart_broken_24_regular),
+                      ],
+                    ),
+                  )
               ],
             ),
             // 题号

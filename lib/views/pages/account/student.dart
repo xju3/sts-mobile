@@ -1,30 +1,28 @@
-import 'package:duowoo/server/model/school.dart';
-import 'package:duowoo/views/forms/register.dart';
-import 'package:duowoo/views/mixins/location_minxin.dart';
-import 'package:duowoo/views/mixins/message_mixin.dart';
-import 'package:fluentui_system_icons/fluentui_system_icons.dart';
-import 'package:flutter/material.dart';
-import 'package:duowoo/views/mixins/login_minxin.dart';
 import 'package:duowoo/server/api/account_api.dart';
-import 'package:duowoo/server/model/registration.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:jpush_flutter/jpush_flutter.dart';
-import 'package:logger/logger.dart';
+import 'package:duowoo/server/model/school.dart';
+import 'package:duowoo/server/model/student.dart';
+import 'package:duowoo/views/forms/student.dart';
+import 'package:duowoo/views/mixins/location_minxin.dart';
+import 'package:duowoo/views/mixins/login_minxin.dart';
+import 'package:duowoo/views/mixins/message_mixin.dart';
 import 'package:duowoo/views/pages/common/base.dart';
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:logger/logger.dart';
 
-class RegisterPage extends StatefulWidget {
-  const RegisterPage({super.key});
+class StudentPage extends StatefulWidget {
+  const StudentPage({super.key});
 
   @override
-  State<RegisterPage> createState() => _RegisterPageState();
+  State<StudentPage> createState() => _StudentPageState();
 }
 
-class _RegisterPageState extends BasePage<RegisterPage>
-    with LoginMixin, MessageMixin, LocationMixin {
+class _StudentPageState extends BasePage<StudentPage>
+    with MessageMixin, LoginMixin, LocationMixin {
   final _formKey = GlobalKey<FormState>();
   final accountApi = AccountApi();
-  final JPush jPush = JPush();
-  final Registration registration = Registration();
+  final student = Student();
   final logger = Logger(printer: PrettyPrinter());
   List<School> schools = [];
 
@@ -33,7 +31,8 @@ class _RegisterPageState extends BasePage<RegisterPage>
     super.initState();
     getSchoolsAround();
   }
-  
+
+
   void getSchoolsAround() async {
     EasyLoading.show(status: "正在查找周边的学校");
     var data = await findSchool(accountApi);
@@ -43,28 +42,24 @@ class _RegisterPageState extends BasePage<RegisterPage>
     EasyLoading.dismiss();
   }
 
-
-
-  void register() {
+  void submit() async {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
-      accountApi.registration(registration).then((accountInfo) {
-        loginHandler(jPush, accountApi, accountInfo, context, null);
+      var accountInfo = await getAccountInfo();
+      var accountId = accountInfo?.parent?.accountId;
+      if (null == accountId) return;
+      accountApi.addStudent(accountId, student).then((val) {
+        if (!mounted) return;
+        Navigator.pop(context);
       });
     }
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    EasyLoading.dismiss();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("新用户注册"),
+        title: const Text('学生登记'),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
@@ -73,20 +68,16 @@ class _RegisterPageState extends BasePage<RegisterPage>
         ),
         actions: [
           IconButton(
-              onPressed: register, icon: Icon(FluentIcons.save_24_regular))
+            icon: const Icon(Icons.save),
+            onPressed: () {
+              submit();
+            },
+          )
         ],
       ),
       body: Padding(
           padding: const EdgeInsets.all(16.0),
-          child: ListView(
-            children: [
-              RegisterForm(
-                _formKey,
-                registration,
-                schools,
-              )
-            ],
-          )),
+          child: StudentForm(student, _formKey, schools)),
     );
   }
 }

@@ -1,22 +1,22 @@
+import 'package:duowoo/views/widgets/app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:photo_view/photo_view_gallery.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:duowoo/views/pages/common/base.dart';
 
-class AssignmentImagesPage extends StatefulWidget {
+class ImagesPage extends StatefulWidget {
   final List<String> imageUrls;
   final int initialIndex;
 
-  const AssignmentImagesPage(
-      {Key? key, required this.imageUrls, this.initialIndex = 0})
+  const ImagesPage({Key? key, required this.imageUrls, this.initialIndex = 0})
       : super(key: key);
 
   @override
-  State<AssignmentImagesPage> createState() => _AssignmentImagesPageState();
+  State<ImagesPage> createState() => _ImagesPageState();
 }
 
-class _AssignmentImagesPageState extends BasePage<AssignmentImagesPage> {
+class _ImagesPageState extends BasePage<ImagesPage> {
   late int currentIndex = widget.initialIndex;
   late PageController pageController;
 
@@ -36,7 +36,14 @@ class _AssignmentImagesPageState extends BasePage<AssignmentImagesPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("${currentIndex + 1}/${widget.imageUrls.length}"),
+        title: const Text('作业照片'),
+        backgroundColor: Color(0XFFA4907C),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
       ),
       body: Container(
         child: PhotoViewGallery.builder(

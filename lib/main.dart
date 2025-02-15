@@ -1,5 +1,7 @@
 import 'package:duowoo/views/pages/review/review.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:loader_overlay/loader_overlay.dart';
 
 import 'package:duowoo/views/pages/account/splash.dart';
 import 'package:flutter/services.dart';
@@ -66,7 +68,18 @@ class _MyAppState extends State<MyApp> {
         routes: {
           '/review': (context) => ReviewPage(), // 配置/home路由对应的页面
         },
-        home: const SplashPage());
+        home: LoaderOverlay(duration: Durations.medium4,
+            reverseDuration: Durations.medium4,
+            overlayColor: Colors.grey.withValues(alpha: 0.8),
+            overlayWidgetBuilder: (_) {
+              //ignored progress for the moment
+              return const Center(
+                child: SpinKitCubeGrid(
+                  color: Colors.red,
+                  size: 50.0,
+                ),
+              );
+            },child: const SplashPage()));
   }
 }
 
